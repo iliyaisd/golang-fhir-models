@@ -27,27 +27,32 @@ import (
 type ResourceType int
 
 const (
-	ResourceTypeAccount ResourceType = iota
+	ResourceTypeResource ResourceType = iota
+	ResourceTypeBinary
+	ResourceTypeBundle
+	ResourceTypeDomainResource
+	ResourceTypeAccount
 	ResourceTypeActivityDefinition
+	ResourceTypeAdministrableProductDefinition
 	ResourceTypeAdverseEvent
 	ResourceTypeAllergyIntolerance
 	ResourceTypeAppointment
 	ResourceTypeAppointmentResponse
 	ResourceTypeAuditEvent
 	ResourceTypeBasic
-	ResourceTypeBinary
 	ResourceTypeBiologicallyDerivedProduct
 	ResourceTypeBodyStructure
-	ResourceTypeBundle
 	ResourceTypeCapabilityStatement
 	ResourceTypeCarePlan
 	ResourceTypeCareTeam
 	ResourceTypeCatalogEntry
 	ResourceTypeChargeItem
 	ResourceTypeChargeItemDefinition
+	ResourceTypeCitation
 	ResourceTypeClaim
 	ResourceTypeClaimResponse
 	ResourceTypeClinicalImpression
+	ResourceTypeClinicalUseDefinition
 	ResourceTypeCodeSystem
 	ResourceTypeCommunication
 	ResourceTypeCommunicationRequest
@@ -69,8 +74,6 @@ const (
 	ResourceTypeDiagnosticReport
 	ResourceTypeDocumentManifest
 	ResourceTypeDocumentReference
-	ResourceTypeDomainResource
-	ResourceTypeEffectEvidenceSynthesis
 	ResourceTypeEncounter
 	ResourceTypeEndpoint
 	ResourceTypeEnrollmentRequest
@@ -78,6 +81,7 @@ const (
 	ResourceTypeEpisodeOfCare
 	ResourceTypeEventDefinition
 	ResourceTypeEvidence
+	ResourceTypeEvidenceReport
 	ResourceTypeEvidenceVariable
 	ResourceTypeExampleScenario
 	ResourceTypeExplanationOfBenefit
@@ -93,12 +97,14 @@ const (
 	ResourceTypeImmunizationEvaluation
 	ResourceTypeImmunizationRecommendation
 	ResourceTypeImplementationGuide
+	ResourceTypeIngredient
 	ResourceTypeInsurancePlan
 	ResourceTypeInvoice
 	ResourceTypeLibrary
 	ResourceTypeLinkage
 	ResourceTypeList
 	ResourceTypeLocation
+	ResourceTypeManufacturedItemDefinition
 	ResourceTypeMeasure
 	ResourceTypeMeasureReport
 	ResourceTypeMedia
@@ -108,28 +114,20 @@ const (
 	ResourceTypeMedicationKnowledge
 	ResourceTypeMedicationRequest
 	ResourceTypeMedicationStatement
-	ResourceTypeMedicinalProduct
-	ResourceTypeMedicinalProductAuthorization
-	ResourceTypeMedicinalProductContraindication
-	ResourceTypeMedicinalProductIndication
-	ResourceTypeMedicinalProductIngredient
-	ResourceTypeMedicinalProductInteraction
-	ResourceTypeMedicinalProductManufactured
-	ResourceTypeMedicinalProductPackaged
-	ResourceTypeMedicinalProductPharmaceutical
-	ResourceTypeMedicinalProductUndesirableEffect
+	ResourceTypeMedicinalProductDefinition
 	ResourceTypeMessageDefinition
 	ResourceTypeMessageHeader
 	ResourceTypeMolecularSequence
 	ResourceTypeNamingSystem
 	ResourceTypeNutritionOrder
+	ResourceTypeNutritionProduct
 	ResourceTypeObservation
 	ResourceTypeObservationDefinition
 	ResourceTypeOperationDefinition
 	ResourceTypeOperationOutcome
 	ResourceTypeOrganization
 	ResourceTypeOrganizationAffiliation
-	ResourceTypeParameters
+	ResourceTypePackagedProductDefinition
 	ResourceTypePatient
 	ResourceTypePaymentNotice
 	ResourceTypePaymentReconciliation
@@ -141,15 +139,14 @@ const (
 	ResourceTypeProvenance
 	ResourceTypeQuestionnaire
 	ResourceTypeQuestionnaireResponse
+	ResourceTypeRegulatedAuthorization
 	ResourceTypeRelatedPerson
 	ResourceTypeRequestGroup
 	ResourceTypeResearchDefinition
 	ResourceTypeResearchElementDefinition
 	ResourceTypeResearchStudy
 	ResourceTypeResearchSubject
-	ResourceTypeResource
 	ResourceTypeRiskAssessment
-	ResourceTypeRiskEvidenceSynthesis
 	ResourceTypeSchedule
 	ResourceTypeSearchParameter
 	ResourceTypeServiceRequest
@@ -159,13 +156,10 @@ const (
 	ResourceTypeStructureDefinition
 	ResourceTypeStructureMap
 	ResourceTypeSubscription
+	ResourceTypeSubscriptionStatus
+	ResourceTypeSubscriptionTopic
 	ResourceTypeSubstance
-	ResourceTypeSubstanceNucleicAcid
-	ResourceTypeSubstancePolymer
-	ResourceTypeSubstanceProtein
-	ResourceTypeSubstanceReferenceInformation
-	ResourceTypeSubstanceSourceMaterial
-	ResourceTypeSubstanceSpecification
+	ResourceTypeSubstanceDefinition
 	ResourceTypeSupplyDelivery
 	ResourceTypeSupplyRequest
 	ResourceTypeTask
@@ -175,6 +169,7 @@ const (
 	ResourceTypeValueSet
 	ResourceTypeVerificationResult
 	ResourceTypeVisionPrescription
+	ResourceTypeParameters
 )
 
 func (code ResourceType) MarshalJSON() ([]byte, error) {
@@ -183,10 +178,20 @@ func (code ResourceType) MarshalJSON() ([]byte, error) {
 func (code *ResourceType) UnmarshalJSON(json []byte) error {
 	s := strings.Trim(string(json), "\"")
 	switch s {
+	case "Resource":
+		*code = ResourceTypeResource
+	case "Binary":
+		*code = ResourceTypeBinary
+	case "Bundle":
+		*code = ResourceTypeBundle
+	case "DomainResource":
+		*code = ResourceTypeDomainResource
 	case "Account":
 		*code = ResourceTypeAccount
 	case "ActivityDefinition":
 		*code = ResourceTypeActivityDefinition
+	case "AdministrableProductDefinition":
+		*code = ResourceTypeAdministrableProductDefinition
 	case "AdverseEvent":
 		*code = ResourceTypeAdverseEvent
 	case "AllergyIntolerance":
@@ -199,14 +204,10 @@ func (code *ResourceType) UnmarshalJSON(json []byte) error {
 		*code = ResourceTypeAuditEvent
 	case "Basic":
 		*code = ResourceTypeBasic
-	case "Binary":
-		*code = ResourceTypeBinary
 	case "BiologicallyDerivedProduct":
 		*code = ResourceTypeBiologicallyDerivedProduct
 	case "BodyStructure":
 		*code = ResourceTypeBodyStructure
-	case "Bundle":
-		*code = ResourceTypeBundle
 	case "CapabilityStatement":
 		*code = ResourceTypeCapabilityStatement
 	case "CarePlan":
@@ -219,12 +220,16 @@ func (code *ResourceType) UnmarshalJSON(json []byte) error {
 		*code = ResourceTypeChargeItem
 	case "ChargeItemDefinition":
 		*code = ResourceTypeChargeItemDefinition
+	case "Citation":
+		*code = ResourceTypeCitation
 	case "Claim":
 		*code = ResourceTypeClaim
 	case "ClaimResponse":
 		*code = ResourceTypeClaimResponse
 	case "ClinicalImpression":
 		*code = ResourceTypeClinicalImpression
+	case "ClinicalUseDefinition":
+		*code = ResourceTypeClinicalUseDefinition
 	case "CodeSystem":
 		*code = ResourceTypeCodeSystem
 	case "Communication":
@@ -267,10 +272,6 @@ func (code *ResourceType) UnmarshalJSON(json []byte) error {
 		*code = ResourceTypeDocumentManifest
 	case "DocumentReference":
 		*code = ResourceTypeDocumentReference
-	case "DomainResource":
-		*code = ResourceTypeDomainResource
-	case "EffectEvidenceSynthesis":
-		*code = ResourceTypeEffectEvidenceSynthesis
 	case "Encounter":
 		*code = ResourceTypeEncounter
 	case "Endpoint":
@@ -285,6 +286,8 @@ func (code *ResourceType) UnmarshalJSON(json []byte) error {
 		*code = ResourceTypeEventDefinition
 	case "Evidence":
 		*code = ResourceTypeEvidence
+	case "EvidenceReport":
+		*code = ResourceTypeEvidenceReport
 	case "EvidenceVariable":
 		*code = ResourceTypeEvidenceVariable
 	case "ExampleScenario":
@@ -315,6 +318,8 @@ func (code *ResourceType) UnmarshalJSON(json []byte) error {
 		*code = ResourceTypeImmunizationRecommendation
 	case "ImplementationGuide":
 		*code = ResourceTypeImplementationGuide
+	case "Ingredient":
+		*code = ResourceTypeIngredient
 	case "InsurancePlan":
 		*code = ResourceTypeInsurancePlan
 	case "Invoice":
@@ -327,6 +332,8 @@ func (code *ResourceType) UnmarshalJSON(json []byte) error {
 		*code = ResourceTypeList
 	case "Location":
 		*code = ResourceTypeLocation
+	case "ManufacturedItemDefinition":
+		*code = ResourceTypeManufacturedItemDefinition
 	case "Measure":
 		*code = ResourceTypeMeasure
 	case "MeasureReport":
@@ -345,26 +352,8 @@ func (code *ResourceType) UnmarshalJSON(json []byte) error {
 		*code = ResourceTypeMedicationRequest
 	case "MedicationStatement":
 		*code = ResourceTypeMedicationStatement
-	case "MedicinalProduct":
-		*code = ResourceTypeMedicinalProduct
-	case "MedicinalProductAuthorization":
-		*code = ResourceTypeMedicinalProductAuthorization
-	case "MedicinalProductContraindication":
-		*code = ResourceTypeMedicinalProductContraindication
-	case "MedicinalProductIndication":
-		*code = ResourceTypeMedicinalProductIndication
-	case "MedicinalProductIngredient":
-		*code = ResourceTypeMedicinalProductIngredient
-	case "MedicinalProductInteraction":
-		*code = ResourceTypeMedicinalProductInteraction
-	case "MedicinalProductManufactured":
-		*code = ResourceTypeMedicinalProductManufactured
-	case "MedicinalProductPackaged":
-		*code = ResourceTypeMedicinalProductPackaged
-	case "MedicinalProductPharmaceutical":
-		*code = ResourceTypeMedicinalProductPharmaceutical
-	case "MedicinalProductUndesirableEffect":
-		*code = ResourceTypeMedicinalProductUndesirableEffect
+	case "MedicinalProductDefinition":
+		*code = ResourceTypeMedicinalProductDefinition
 	case "MessageDefinition":
 		*code = ResourceTypeMessageDefinition
 	case "MessageHeader":
@@ -375,6 +364,8 @@ func (code *ResourceType) UnmarshalJSON(json []byte) error {
 		*code = ResourceTypeNamingSystem
 	case "NutritionOrder":
 		*code = ResourceTypeNutritionOrder
+	case "NutritionProduct":
+		*code = ResourceTypeNutritionProduct
 	case "Observation":
 		*code = ResourceTypeObservation
 	case "ObservationDefinition":
@@ -387,8 +378,8 @@ func (code *ResourceType) UnmarshalJSON(json []byte) error {
 		*code = ResourceTypeOrganization
 	case "OrganizationAffiliation":
 		*code = ResourceTypeOrganizationAffiliation
-	case "Parameters":
-		*code = ResourceTypeParameters
+	case "PackagedProductDefinition":
+		*code = ResourceTypePackagedProductDefinition
 	case "Patient":
 		*code = ResourceTypePatient
 	case "PaymentNotice":
@@ -411,6 +402,8 @@ func (code *ResourceType) UnmarshalJSON(json []byte) error {
 		*code = ResourceTypeQuestionnaire
 	case "QuestionnaireResponse":
 		*code = ResourceTypeQuestionnaireResponse
+	case "RegulatedAuthorization":
+		*code = ResourceTypeRegulatedAuthorization
 	case "RelatedPerson":
 		*code = ResourceTypeRelatedPerson
 	case "RequestGroup":
@@ -423,12 +416,8 @@ func (code *ResourceType) UnmarshalJSON(json []byte) error {
 		*code = ResourceTypeResearchStudy
 	case "ResearchSubject":
 		*code = ResourceTypeResearchSubject
-	case "Resource":
-		*code = ResourceTypeResource
 	case "RiskAssessment":
 		*code = ResourceTypeRiskAssessment
-	case "RiskEvidenceSynthesis":
-		*code = ResourceTypeRiskEvidenceSynthesis
 	case "Schedule":
 		*code = ResourceTypeSchedule
 	case "SearchParameter":
@@ -447,20 +436,14 @@ func (code *ResourceType) UnmarshalJSON(json []byte) error {
 		*code = ResourceTypeStructureMap
 	case "Subscription":
 		*code = ResourceTypeSubscription
+	case "SubscriptionStatus":
+		*code = ResourceTypeSubscriptionStatus
+	case "SubscriptionTopic":
+		*code = ResourceTypeSubscriptionTopic
 	case "Substance":
 		*code = ResourceTypeSubstance
-	case "SubstanceNucleicAcid":
-		*code = ResourceTypeSubstanceNucleicAcid
-	case "SubstancePolymer":
-		*code = ResourceTypeSubstancePolymer
-	case "SubstanceProtein":
-		*code = ResourceTypeSubstanceProtein
-	case "SubstanceReferenceInformation":
-		*code = ResourceTypeSubstanceReferenceInformation
-	case "SubstanceSourceMaterial":
-		*code = ResourceTypeSubstanceSourceMaterial
-	case "SubstanceSpecification":
-		*code = ResourceTypeSubstanceSpecification
+	case "SubstanceDefinition":
+		*code = ResourceTypeSubstanceDefinition
 	case "SupplyDelivery":
 		*code = ResourceTypeSupplyDelivery
 	case "SupplyRequest":
@@ -479,6 +462,8 @@ func (code *ResourceType) UnmarshalJSON(json []byte) error {
 		*code = ResourceTypeVerificationResult
 	case "VisionPrescription":
 		*code = ResourceTypeVisionPrescription
+	case "Parameters":
+		*code = ResourceTypeParameters
 	default:
 		return fmt.Errorf("unknown ResourceType code `%s`", s)
 	}
@@ -489,10 +474,20 @@ func (code ResourceType) String() string {
 }
 func (code ResourceType) Code() string {
 	switch code {
+	case ResourceTypeResource:
+		return "Resource"
+	case ResourceTypeBinary:
+		return "Binary"
+	case ResourceTypeBundle:
+		return "Bundle"
+	case ResourceTypeDomainResource:
+		return "DomainResource"
 	case ResourceTypeAccount:
 		return "Account"
 	case ResourceTypeActivityDefinition:
 		return "ActivityDefinition"
+	case ResourceTypeAdministrableProductDefinition:
+		return "AdministrableProductDefinition"
 	case ResourceTypeAdverseEvent:
 		return "AdverseEvent"
 	case ResourceTypeAllergyIntolerance:
@@ -505,14 +500,10 @@ func (code ResourceType) Code() string {
 		return "AuditEvent"
 	case ResourceTypeBasic:
 		return "Basic"
-	case ResourceTypeBinary:
-		return "Binary"
 	case ResourceTypeBiologicallyDerivedProduct:
 		return "BiologicallyDerivedProduct"
 	case ResourceTypeBodyStructure:
 		return "BodyStructure"
-	case ResourceTypeBundle:
-		return "Bundle"
 	case ResourceTypeCapabilityStatement:
 		return "CapabilityStatement"
 	case ResourceTypeCarePlan:
@@ -525,12 +516,16 @@ func (code ResourceType) Code() string {
 		return "ChargeItem"
 	case ResourceTypeChargeItemDefinition:
 		return "ChargeItemDefinition"
+	case ResourceTypeCitation:
+		return "Citation"
 	case ResourceTypeClaim:
 		return "Claim"
 	case ResourceTypeClaimResponse:
 		return "ClaimResponse"
 	case ResourceTypeClinicalImpression:
 		return "ClinicalImpression"
+	case ResourceTypeClinicalUseDefinition:
+		return "ClinicalUseDefinition"
 	case ResourceTypeCodeSystem:
 		return "CodeSystem"
 	case ResourceTypeCommunication:
@@ -573,10 +568,6 @@ func (code ResourceType) Code() string {
 		return "DocumentManifest"
 	case ResourceTypeDocumentReference:
 		return "DocumentReference"
-	case ResourceTypeDomainResource:
-		return "DomainResource"
-	case ResourceTypeEffectEvidenceSynthesis:
-		return "EffectEvidenceSynthesis"
 	case ResourceTypeEncounter:
 		return "Encounter"
 	case ResourceTypeEndpoint:
@@ -591,6 +582,8 @@ func (code ResourceType) Code() string {
 		return "EventDefinition"
 	case ResourceTypeEvidence:
 		return "Evidence"
+	case ResourceTypeEvidenceReport:
+		return "EvidenceReport"
 	case ResourceTypeEvidenceVariable:
 		return "EvidenceVariable"
 	case ResourceTypeExampleScenario:
@@ -621,6 +614,8 @@ func (code ResourceType) Code() string {
 		return "ImmunizationRecommendation"
 	case ResourceTypeImplementationGuide:
 		return "ImplementationGuide"
+	case ResourceTypeIngredient:
+		return "Ingredient"
 	case ResourceTypeInsurancePlan:
 		return "InsurancePlan"
 	case ResourceTypeInvoice:
@@ -633,6 +628,8 @@ func (code ResourceType) Code() string {
 		return "List"
 	case ResourceTypeLocation:
 		return "Location"
+	case ResourceTypeManufacturedItemDefinition:
+		return "ManufacturedItemDefinition"
 	case ResourceTypeMeasure:
 		return "Measure"
 	case ResourceTypeMeasureReport:
@@ -651,26 +648,8 @@ func (code ResourceType) Code() string {
 		return "MedicationRequest"
 	case ResourceTypeMedicationStatement:
 		return "MedicationStatement"
-	case ResourceTypeMedicinalProduct:
-		return "MedicinalProduct"
-	case ResourceTypeMedicinalProductAuthorization:
-		return "MedicinalProductAuthorization"
-	case ResourceTypeMedicinalProductContraindication:
-		return "MedicinalProductContraindication"
-	case ResourceTypeMedicinalProductIndication:
-		return "MedicinalProductIndication"
-	case ResourceTypeMedicinalProductIngredient:
-		return "MedicinalProductIngredient"
-	case ResourceTypeMedicinalProductInteraction:
-		return "MedicinalProductInteraction"
-	case ResourceTypeMedicinalProductManufactured:
-		return "MedicinalProductManufactured"
-	case ResourceTypeMedicinalProductPackaged:
-		return "MedicinalProductPackaged"
-	case ResourceTypeMedicinalProductPharmaceutical:
-		return "MedicinalProductPharmaceutical"
-	case ResourceTypeMedicinalProductUndesirableEffect:
-		return "MedicinalProductUndesirableEffect"
+	case ResourceTypeMedicinalProductDefinition:
+		return "MedicinalProductDefinition"
 	case ResourceTypeMessageDefinition:
 		return "MessageDefinition"
 	case ResourceTypeMessageHeader:
@@ -681,6 +660,8 @@ func (code ResourceType) Code() string {
 		return "NamingSystem"
 	case ResourceTypeNutritionOrder:
 		return "NutritionOrder"
+	case ResourceTypeNutritionProduct:
+		return "NutritionProduct"
 	case ResourceTypeObservation:
 		return "Observation"
 	case ResourceTypeObservationDefinition:
@@ -693,8 +674,8 @@ func (code ResourceType) Code() string {
 		return "Organization"
 	case ResourceTypeOrganizationAffiliation:
 		return "OrganizationAffiliation"
-	case ResourceTypeParameters:
-		return "Parameters"
+	case ResourceTypePackagedProductDefinition:
+		return "PackagedProductDefinition"
 	case ResourceTypePatient:
 		return "Patient"
 	case ResourceTypePaymentNotice:
@@ -717,6 +698,8 @@ func (code ResourceType) Code() string {
 		return "Questionnaire"
 	case ResourceTypeQuestionnaireResponse:
 		return "QuestionnaireResponse"
+	case ResourceTypeRegulatedAuthorization:
+		return "RegulatedAuthorization"
 	case ResourceTypeRelatedPerson:
 		return "RelatedPerson"
 	case ResourceTypeRequestGroup:
@@ -729,12 +712,8 @@ func (code ResourceType) Code() string {
 		return "ResearchStudy"
 	case ResourceTypeResearchSubject:
 		return "ResearchSubject"
-	case ResourceTypeResource:
-		return "Resource"
 	case ResourceTypeRiskAssessment:
 		return "RiskAssessment"
-	case ResourceTypeRiskEvidenceSynthesis:
-		return "RiskEvidenceSynthesis"
 	case ResourceTypeSchedule:
 		return "Schedule"
 	case ResourceTypeSearchParameter:
@@ -753,20 +732,14 @@ func (code ResourceType) Code() string {
 		return "StructureMap"
 	case ResourceTypeSubscription:
 		return "Subscription"
+	case ResourceTypeSubscriptionStatus:
+		return "SubscriptionStatus"
+	case ResourceTypeSubscriptionTopic:
+		return "SubscriptionTopic"
 	case ResourceTypeSubstance:
 		return "Substance"
-	case ResourceTypeSubstanceNucleicAcid:
-		return "SubstanceNucleicAcid"
-	case ResourceTypeSubstancePolymer:
-		return "SubstancePolymer"
-	case ResourceTypeSubstanceProtein:
-		return "SubstanceProtein"
-	case ResourceTypeSubstanceReferenceInformation:
-		return "SubstanceReferenceInformation"
-	case ResourceTypeSubstanceSourceMaterial:
-		return "SubstanceSourceMaterial"
-	case ResourceTypeSubstanceSpecification:
-		return "SubstanceSpecification"
+	case ResourceTypeSubstanceDefinition:
+		return "SubstanceDefinition"
 	case ResourceTypeSupplyDelivery:
 		return "SupplyDelivery"
 	case ResourceTypeSupplyRequest:
@@ -785,15 +758,27 @@ func (code ResourceType) Code() string {
 		return "VerificationResult"
 	case ResourceTypeVisionPrescription:
 		return "VisionPrescription"
+	case ResourceTypeParameters:
+		return "Parameters"
 	}
 	return "<unknown>"
 }
 func (code ResourceType) Display() string {
 	switch code {
+	case ResourceTypeResource:
+		return "Resource"
+	case ResourceTypeBinary:
+		return "Binary"
+	case ResourceTypeBundle:
+		return "Bundle"
+	case ResourceTypeDomainResource:
+		return "DomainResource"
 	case ResourceTypeAccount:
 		return "Account"
 	case ResourceTypeActivityDefinition:
 		return "ActivityDefinition"
+	case ResourceTypeAdministrableProductDefinition:
+		return "AdministrableProductDefinition"
 	case ResourceTypeAdverseEvent:
 		return "AdverseEvent"
 	case ResourceTypeAllergyIntolerance:
@@ -806,14 +791,10 @@ func (code ResourceType) Display() string {
 		return "AuditEvent"
 	case ResourceTypeBasic:
 		return "Basic"
-	case ResourceTypeBinary:
-		return "Binary"
 	case ResourceTypeBiologicallyDerivedProduct:
 		return "BiologicallyDerivedProduct"
 	case ResourceTypeBodyStructure:
 		return "BodyStructure"
-	case ResourceTypeBundle:
-		return "Bundle"
 	case ResourceTypeCapabilityStatement:
 		return "CapabilityStatement"
 	case ResourceTypeCarePlan:
@@ -826,12 +807,16 @@ func (code ResourceType) Display() string {
 		return "ChargeItem"
 	case ResourceTypeChargeItemDefinition:
 		return "ChargeItemDefinition"
+	case ResourceTypeCitation:
+		return "Citation"
 	case ResourceTypeClaim:
 		return "Claim"
 	case ResourceTypeClaimResponse:
 		return "ClaimResponse"
 	case ResourceTypeClinicalImpression:
 		return "ClinicalImpression"
+	case ResourceTypeClinicalUseDefinition:
+		return "ClinicalUseDefinition"
 	case ResourceTypeCodeSystem:
 		return "CodeSystem"
 	case ResourceTypeCommunication:
@@ -874,10 +859,6 @@ func (code ResourceType) Display() string {
 		return "DocumentManifest"
 	case ResourceTypeDocumentReference:
 		return "DocumentReference"
-	case ResourceTypeDomainResource:
-		return "DomainResource"
-	case ResourceTypeEffectEvidenceSynthesis:
-		return "EffectEvidenceSynthesis"
 	case ResourceTypeEncounter:
 		return "Encounter"
 	case ResourceTypeEndpoint:
@@ -892,6 +873,8 @@ func (code ResourceType) Display() string {
 		return "EventDefinition"
 	case ResourceTypeEvidence:
 		return "Evidence"
+	case ResourceTypeEvidenceReport:
+		return "EvidenceReport"
 	case ResourceTypeEvidenceVariable:
 		return "EvidenceVariable"
 	case ResourceTypeExampleScenario:
@@ -922,6 +905,8 @@ func (code ResourceType) Display() string {
 		return "ImmunizationRecommendation"
 	case ResourceTypeImplementationGuide:
 		return "ImplementationGuide"
+	case ResourceTypeIngredient:
+		return "Ingredient"
 	case ResourceTypeInsurancePlan:
 		return "InsurancePlan"
 	case ResourceTypeInvoice:
@@ -934,6 +919,8 @@ func (code ResourceType) Display() string {
 		return "List"
 	case ResourceTypeLocation:
 		return "Location"
+	case ResourceTypeManufacturedItemDefinition:
+		return "ManufacturedItemDefinition"
 	case ResourceTypeMeasure:
 		return "Measure"
 	case ResourceTypeMeasureReport:
@@ -952,26 +939,8 @@ func (code ResourceType) Display() string {
 		return "MedicationRequest"
 	case ResourceTypeMedicationStatement:
 		return "MedicationStatement"
-	case ResourceTypeMedicinalProduct:
-		return "MedicinalProduct"
-	case ResourceTypeMedicinalProductAuthorization:
-		return "MedicinalProductAuthorization"
-	case ResourceTypeMedicinalProductContraindication:
-		return "MedicinalProductContraindication"
-	case ResourceTypeMedicinalProductIndication:
-		return "MedicinalProductIndication"
-	case ResourceTypeMedicinalProductIngredient:
-		return "MedicinalProductIngredient"
-	case ResourceTypeMedicinalProductInteraction:
-		return "MedicinalProductInteraction"
-	case ResourceTypeMedicinalProductManufactured:
-		return "MedicinalProductManufactured"
-	case ResourceTypeMedicinalProductPackaged:
-		return "MedicinalProductPackaged"
-	case ResourceTypeMedicinalProductPharmaceutical:
-		return "MedicinalProductPharmaceutical"
-	case ResourceTypeMedicinalProductUndesirableEffect:
-		return "MedicinalProductUndesirableEffect"
+	case ResourceTypeMedicinalProductDefinition:
+		return "MedicinalProductDefinition"
 	case ResourceTypeMessageDefinition:
 		return "MessageDefinition"
 	case ResourceTypeMessageHeader:
@@ -982,6 +951,8 @@ func (code ResourceType) Display() string {
 		return "NamingSystem"
 	case ResourceTypeNutritionOrder:
 		return "NutritionOrder"
+	case ResourceTypeNutritionProduct:
+		return "NutritionProduct"
 	case ResourceTypeObservation:
 		return "Observation"
 	case ResourceTypeObservationDefinition:
@@ -994,8 +965,8 @@ func (code ResourceType) Display() string {
 		return "Organization"
 	case ResourceTypeOrganizationAffiliation:
 		return "OrganizationAffiliation"
-	case ResourceTypeParameters:
-		return "Parameters"
+	case ResourceTypePackagedProductDefinition:
+		return "PackagedProductDefinition"
 	case ResourceTypePatient:
 		return "Patient"
 	case ResourceTypePaymentNotice:
@@ -1018,6 +989,8 @@ func (code ResourceType) Display() string {
 		return "Questionnaire"
 	case ResourceTypeQuestionnaireResponse:
 		return "QuestionnaireResponse"
+	case ResourceTypeRegulatedAuthorization:
+		return "RegulatedAuthorization"
 	case ResourceTypeRelatedPerson:
 		return "RelatedPerson"
 	case ResourceTypeRequestGroup:
@@ -1030,12 +1003,8 @@ func (code ResourceType) Display() string {
 		return "ResearchStudy"
 	case ResourceTypeResearchSubject:
 		return "ResearchSubject"
-	case ResourceTypeResource:
-		return "Resource"
 	case ResourceTypeRiskAssessment:
 		return "RiskAssessment"
-	case ResourceTypeRiskEvidenceSynthesis:
-		return "RiskEvidenceSynthesis"
 	case ResourceTypeSchedule:
 		return "Schedule"
 	case ResourceTypeSearchParameter:
@@ -1054,20 +1023,14 @@ func (code ResourceType) Display() string {
 		return "StructureMap"
 	case ResourceTypeSubscription:
 		return "Subscription"
+	case ResourceTypeSubscriptionStatus:
+		return "SubscriptionStatus"
+	case ResourceTypeSubscriptionTopic:
+		return "SubscriptionTopic"
 	case ResourceTypeSubstance:
 		return "Substance"
-	case ResourceTypeSubstanceNucleicAcid:
-		return "SubstanceNucleicAcid"
-	case ResourceTypeSubstancePolymer:
-		return "SubstancePolymer"
-	case ResourceTypeSubstanceProtein:
-		return "SubstanceProtein"
-	case ResourceTypeSubstanceReferenceInformation:
-		return "SubstanceReferenceInformation"
-	case ResourceTypeSubstanceSourceMaterial:
-		return "SubstanceSourceMaterial"
-	case ResourceTypeSubstanceSpecification:
-		return "SubstanceSpecification"
+	case ResourceTypeSubstanceDefinition:
+		return "SubstanceDefinition"
 	case ResourceTypeSupplyDelivery:
 		return "SupplyDelivery"
 	case ResourceTypeSupplyRequest:
@@ -1086,15 +1049,27 @@ func (code ResourceType) Display() string {
 		return "VerificationResult"
 	case ResourceTypeVisionPrescription:
 		return "VisionPrescription"
+	case ResourceTypeParameters:
+		return "Parameters"
 	}
 	return "<unknown>"
 }
 func (code ResourceType) Definition() string {
 	switch code {
+	case ResourceTypeResource:
+		return "--- Abstract Type! ---This is the base resource type for everything."
+	case ResourceTypeBinary:
+		return "A resource that represents the data of a single raw artifact as digital content accessible in its native format.  A Binary resource can contain any content, whether text, image, pdf, zip archive, etc."
+	case ResourceTypeBundle:
+		return "A container for a collection of resources."
+	case ResourceTypeDomainResource:
+		return "--- Abstract Type! ---A resource that includes narrative, extensions, and contained resources."
 	case ResourceTypeAccount:
 		return "A financial tool for tracking value accrued for a particular purpose.  In the healthcare field, used to track charges for a patient, cost centers, etc."
 	case ResourceTypeActivityDefinition:
 		return "This resource allows for the definition of some activity to be performed, independent of a particular patient, practitioner, or other performance context."
+	case ResourceTypeAdministrableProductDefinition:
+		return "A medicinal product in the final form which is suitable for administering to a patient (after any mixing of multiple components, dissolution etc. has been performed)."
 	case ResourceTypeAdverseEvent:
 		return "Actual or  potential/avoided event causing unintended physical injury resulting from or contributed to by medical care, a research study or other healthcare setting factors that requires additional monitoring, treatment, or hospitalization, or that results in death."
 	case ResourceTypeAllergyIntolerance:
@@ -1107,14 +1082,10 @@ func (code ResourceType) Definition() string {
 		return "A record of an event made for purposes of maintaining a security log. Typical uses include detection of intrusion attempts and monitoring for inappropriate usage."
 	case ResourceTypeBasic:
 		return "Basic is used for handling concepts not yet defined in FHIR, narrative-only resources that don't map to an existing resource, and custom resources not appropriate for inclusion in the FHIR specification."
-	case ResourceTypeBinary:
-		return "A resource that represents the data of a single raw artifact as digital content accessible in its native format.  A Binary resource can contain any content, whether text, image, pdf, zip archive, etc."
 	case ResourceTypeBiologicallyDerivedProduct:
 		return "A material substance originating from a biological entity intended to be transplanted or infused\ninto another (possibly the same) biological entity."
 	case ResourceTypeBodyStructure:
 		return "Record details about an anatomical structure.  This resource may be used when a coded concept does not provide the necessary detail needed for the use case."
-	case ResourceTypeBundle:
-		return "A container for a collection of resources."
 	case ResourceTypeCapabilityStatement:
 		return "A Capability Statement documents a set of capabilities (behaviors) of a FHIR Server for a particular version of FHIR that may be used as a statement of actual server functionality or a statement of required or desired server implementation."
 	case ResourceTypeCarePlan:
@@ -1127,12 +1098,16 @@ func (code ResourceType) Definition() string {
 		return "The resource ChargeItem describes the provision of healthcare provider products for a certain patient, therefore referring not only to the product, but containing in addition details of the provision, like date, time, amounts and participating organizations and persons. Main Usage of the ChargeItem is to enable the billing process and internal cost allocation."
 	case ResourceTypeChargeItemDefinition:
 		return "The ChargeItemDefinition resource provides the properties that apply to the (billing) codes necessary to calculate costs and prices. The properties may differ largely depending on type and realm, therefore this resource gives only a rough structure and requires profiling for each type of billing code system."
+	case ResourceTypeCitation:
+		return "The Citation Resource enables reference to any knowledge artifact for purposes of identification and attribution. The Citation Resource supports existing reference structures and developing publication practices such as versioning, expressing complex contributorship roles, and referencing computable resources."
 	case ResourceTypeClaim:
 		return "A provider issued list of professional services and products which have been provided, or are to be provided, to a patient which is sent to an insurer for reimbursement."
 	case ResourceTypeClaimResponse:
 		return "This resource provides the adjudication details from the processing of a Claim resource."
 	case ResourceTypeClinicalImpression:
 		return "A record of a clinical assessment performed to determine what problem(s) may affect the patient and before planning the treatments or management strategies that are best to manage a patient's condition. Assessments are often 1:1 with a clinical consultation / encounter,  but this varies greatly depending on the clinical workflow. This resource is called \"ClinicalImpression\" rather than \"ClinicalAssessment\" to avoid confusion with the recording of assessment tools such as Apgar score."
+	case ResourceTypeClinicalUseDefinition:
+		return "A single issue - either an indication, contraindication, interaction or an undesirable effect for a medicinal product, medication, device or procedure."
 	case ResourceTypeCodeSystem:
 		return "The CodeSystem resource is used to declare the existence of and describe a code system or code system supplement and its key properties, and optionally define a part or all of its content."
 	case ResourceTypeCommunication:
@@ -1175,10 +1150,6 @@ func (code ResourceType) Definition() string {
 		return "A collection of documents compiled for a purpose together with metadata that applies to the collection."
 	case ResourceTypeDocumentReference:
 		return "A reference to a document of any kind for any purpose. Provides metadata about the document so that the document can be discovered and managed. The scope of a document is any seralized object with a mime-type, so includes formal patient centric documents (CDA), cliical notes, scanned paper, and non-patient specific documents like policy text."
-	case ResourceTypeDomainResource:
-		return "A resource that includes narrative, extensions, and contained resources."
-	case ResourceTypeEffectEvidenceSynthesis:
-		return "The EffectEvidenceSynthesis resource describes the difference in an outcome between exposures states in a population where the effect estimate is derived from a combination of research studies."
 	case ResourceTypeEncounter:
 		return "An interaction between a patient and healthcare provider(s) for the purpose of providing healthcare service(s) or assessing the health status of a patient."
 	case ResourceTypeEndpoint:
@@ -1192,9 +1163,11 @@ func (code ResourceType) Definition() string {
 	case ResourceTypeEventDefinition:
 		return "The EventDefinition resource provides a reusable description of when a particular event can occur."
 	case ResourceTypeEvidence:
-		return "The Evidence resource describes the conditional state (population and any exposures being compared within the population) and outcome (if specified) that the knowledge (evidence, assertion, recommendation) is about."
+		return "The Evidence Resource provides a machine-interpretable expression of an evidence concept including the evidence variables (eg population, exposures/interventions, comparators, outcomes, measured variables, confounding variables), the statistics, and the certainty of this evidence."
+	case ResourceTypeEvidenceReport:
+		return "The EvidenceReport Resource is a specialized container for a collection of resources and codable concepts, adapted to support compositions of Evidence, EvidenceVariable, and Citation resources and related concepts."
 	case ResourceTypeEvidenceVariable:
-		return "The EvidenceVariable resource describes a \"PICO\" element that knowledge (evidence, assertion, recommendation) is about."
+		return "The EvidenceVariable resource describes an element that knowledge (Evidence) is about."
 	case ResourceTypeExampleScenario:
 		return "Example of workflow instance."
 	case ResourceTypeExplanationOfBenefit:
@@ -1223,6 +1196,8 @@ func (code ResourceType) Definition() string {
 		return "A patient's point-in-time set of recommendations (i.e. forecasting) according to a published schedule with optional supporting justification."
 	case ResourceTypeImplementationGuide:
 		return "A set of rules of how a particular interoperability or standards problem is solved - typically through the use of FHIR resources. This resource is used to gather all the parts of an implementation guide into a logical whole and to publish a computable definition of all the parts."
+	case ResourceTypeIngredient:
+		return "An ingredient of a manufactured item or pharmaceutical product."
 	case ResourceTypeInsurancePlan:
 		return "Details of a Health Insurance product/plan provided by an organization."
 	case ResourceTypeInvoice:
@@ -1235,6 +1210,8 @@ func (code ResourceType) Definition() string {
 		return "A list is a curated collection of resources."
 	case ResourceTypeLocation:
 		return "Details and position information for a physical place where services are provided and resources and participants may be stored, found, contained, or accommodated."
+	case ResourceTypeManufacturedItemDefinition:
+		return "The definition and characteristics of a medicinal manufactured item, such as a tablet or capsule, as contained in a packaged medicinal product."
 	case ResourceTypeMeasure:
 		return "The Measure resource provides the definition of a quality measure."
 	case ResourceTypeMeasureReport:
@@ -1253,26 +1230,8 @@ func (code ResourceType) Definition() string {
 		return "An order or request for both supply of the medication and the instructions for administration of the medication to a patient. The resource is called \"MedicationRequest\" rather than \"MedicationPrescription\" or \"MedicationOrder\" to generalize the use across inpatient and outpatient settings, including care plans, etc., and to harmonize with workflow patterns."
 	case ResourceTypeMedicationStatement:
 		return "A record of a medication that is being consumed by a patient.   A MedicationStatement may indicate that the patient may be taking the medication now or has taken the medication in the past or will be taking the medication in the future.  The source of this information can be the patient, significant other (such as a family member or spouse), or a clinician.  A common scenario where this information is captured is during the history taking process during a patient visit or stay.   The medication information may come from sources such as the patient's memory, from a prescription bottle,  or from a list of medications the patient, clinician or other party maintains. \n\nThe primary difference between a medication statement and a medication administration is that the medication administration has complete administration information and is based on actual administration information from the person who administered the medication.  A medication statement is often, if not always, less specific.  There is no required date/time when the medication was administered, in fact we only know that a source has reported the patient is taking this medication, where details such as time, quantity, or rate or even medication product may be incomplete or missing or less precise.  As stated earlier, the medication statement information may come from the patient's memory, from a prescription bottle or from a list of medications the patient, clinician or other party maintains.  Medication administration is more formal and is not missing detailed information."
-	case ResourceTypeMedicinalProduct:
-		return "Detailed definition of a medicinal product, typically for uses other than direct patient care (e.g. regulatory use)."
-	case ResourceTypeMedicinalProductAuthorization:
-		return "The regulatory authorization of a medicinal product."
-	case ResourceTypeMedicinalProductContraindication:
-		return "The clinical particulars - indications, contraindications etc. of a medicinal product, including for regulatory purposes."
-	case ResourceTypeMedicinalProductIndication:
-		return "Indication for the Medicinal Product."
-	case ResourceTypeMedicinalProductIngredient:
-		return "An ingredient of a manufactured item or pharmaceutical product."
-	case ResourceTypeMedicinalProductInteraction:
-		return "The interactions of the medicinal product with other medicinal products, or other forms of interactions."
-	case ResourceTypeMedicinalProductManufactured:
-		return "The manufactured item as contained in the packaged medicinal product."
-	case ResourceTypeMedicinalProductPackaged:
-		return "A medicinal product in a container or package."
-	case ResourceTypeMedicinalProductPharmaceutical:
-		return "A pharmaceutical product described in terms of its composition and dose form."
-	case ResourceTypeMedicinalProductUndesirableEffect:
-		return "Describe the undesirable effects of the medicinal product."
+	case ResourceTypeMedicinalProductDefinition:
+		return "Detailed definition of a medicinal product, typically for uses other than direct patient care (e.g. regulatory use, drug catalogs, to support prescribing, adverse events management etc.)."
 	case ResourceTypeMessageDefinition:
 		return "Defines the characteristics of a message that can be shared between systems, including the type of event that initiates the message, the content to be transmitted and what response(s), if any, are permitted."
 	case ResourceTypeMessageHeader:
@@ -1283,6 +1242,8 @@ func (code ResourceType) Definition() string {
 		return "A curated namespace that issues unique symbols within that namespace for the identification of concepts, people, devices, etc.  Represents a \"System\" used within the Identifier and Coding data types."
 	case ResourceTypeNutritionOrder:
 		return "A request to supply a diet, formula feeding (enteral) or oral nutritional supplement to a patient/resident."
+	case ResourceTypeNutritionProduct:
+		return "A food or fluid product that is consumed by patients."
 	case ResourceTypeObservation:
 		return "Measurements and simple assertions made about a patient, device or other subject."
 	case ResourceTypeObservationDefinition:
@@ -1295,8 +1256,8 @@ func (code ResourceType) Definition() string {
 		return "A formally or informally recognized grouping of people or organizations formed for the purpose of achieving some form of collective action.  Includes companies, institutions, corporations, departments, community groups, healthcare practice groups, payer/insurer, etc."
 	case ResourceTypeOrganizationAffiliation:
 		return "Defines an affiliation/assotiation/relationship between 2 distinct oganizations, that is not a part-of relationship/sub-division relationship."
-	case ResourceTypeParameters:
-		return "This resource is a non-persisted resource used to pass information into and back from an [operation](operations.html). It has no other use, and there is no RESTful endpoint associated with it."
+	case ResourceTypePackagedProductDefinition:
+		return "A medically related item or items, in a container or package."
 	case ResourceTypePatient:
 		return "Demographics and other administrative information about an individual or animal receiving care or other health-related services."
 	case ResourceTypePaymentNotice:
@@ -1306,7 +1267,7 @@ func (code ResourceType) Definition() string {
 	case ResourceTypePerson:
 		return "Demographics and administrative information about a person independent of a specific health-related context."
 	case ResourceTypePlanDefinition:
-		return "This resource allows for the definition of various types of plans as a sharable, consumable, and executable artifact. The resource is general enough to support the description of a broad range of clinical artifacts such as clinical decision support rules, order sets and protocols."
+		return "This resource allows for the definition of various types of plans as a sharable, consumable, and executable artifact. The resource is general enough to support the description of a broad range of clinical and non-clinical artifacts such as clinical decision support rules, order sets, protocols, and drug quality specifications."
 	case ResourceTypePractitioner:
 		return "A person who is directly or indirectly involved in the provisioning of healthcare."
 	case ResourceTypePractitionerRole:
@@ -1319,6 +1280,8 @@ func (code ResourceType) Definition() string {
 		return "A structured set of questions intended to guide the collection of answers from end-users. Questionnaires provide detailed control over order, presentation, phraseology and grouping to allow coherent, consistent data collection."
 	case ResourceTypeQuestionnaireResponse:
 		return "A structured set of questions and their answers. The questions are ordered and grouped into coherent subsets, corresponding to the structure of the grouping of the questionnaire being responded to."
+	case ResourceTypeRegulatedAuthorization:
+		return "Regulatory approval, clearance or licencing related to a regulated product, treatment, facility or activity that is cited in a guidance, regulation, rule or legislative act. An example is Market Authorization relating to a Medicinal Product."
 	case ResourceTypeRelatedPerson:
 		return "Information about a person that is involved in the care for a patient, but who is not the target of healthcare, nor has a formal responsibility in the care process."
 	case ResourceTypeRequestGroup:
@@ -1331,12 +1294,8 @@ func (code ResourceType) Definition() string {
 		return "A process where a researcher or organization plans and then executes a series of steps intended to increase the field of healthcare-related knowledge.  This includes studies of safety, efficacy, comparative effectiveness and other information about medications, devices, therapies and other interventional and investigative techniques.  A ResearchStudy involves the gathering of information about human or animal subjects."
 	case ResourceTypeResearchSubject:
 		return "A physical entity which is the primary unit of operational and/or administrative interest in a study."
-	case ResourceTypeResource:
-		return "This is the base resource type for everything."
 	case ResourceTypeRiskAssessment:
 		return "An assessment of the likely outcome(s) for a patient or other subject as well as the likelihood of each outcome."
-	case ResourceTypeRiskEvidenceSynthesis:
-		return "The RiskEvidenceSynthesis resource describes the likelihood of an outcome in a population plus exposure state where the risk estimate is derived from a combination of research studies."
 	case ResourceTypeSchedule:
 		return "A container for slots of time that may be available for booking appointments."
 	case ResourceTypeSearchParameter:
@@ -1355,19 +1314,13 @@ func (code ResourceType) Definition() string {
 		return "A Map of relationships between 2 structures that can be used to transform data."
 	case ResourceTypeSubscription:
 		return "The subscription resource is used to define a push-based subscription from a server to another system. Once a subscription is registered with the server, the server checks every resource that is created or updated, and if the resource matches the given criteria, it sends a message on the defined \"channel\" so that another system can take an appropriate action."
+	case ResourceTypeSubscriptionStatus:
+		return "The SubscriptionStatus resource describes the state of a Subscription during notifications."
+	case ResourceTypeSubscriptionTopic:
+		return "Describes a stream of resource state changes identified by trigger criteria and annotated with labels useful to filter projections from this topic."
 	case ResourceTypeSubstance:
 		return "A homogeneous material with a definite composition."
-	case ResourceTypeSubstanceNucleicAcid:
-		return "Nucleic acids are defined by three distinct elements: the base, sugar and linkage. Individual substance/moiety IDs will be created for each of these elements. The nucleotide sequence will be always entered in the 5’-3’ direction."
-	case ResourceTypeSubstancePolymer:
-		return "Todo."
-	case ResourceTypeSubstanceProtein:
-		return "A SubstanceProtein is defined as a single unit of a linear amino acid sequence, or a combination of subunits that are either covalently linked or have a defined invariant stoichiometric relationship. This includes all synthetic, recombinant and purified SubstanceProteins of defined sequence, whether the use is therapeutic or prophylactic. This set of elements will be used to describe albumins, coagulation factors, cytokines, growth factors, peptide/SubstanceProtein hormones, enzymes, toxins, toxoids, recombinant vaccines, and immunomodulators."
-	case ResourceTypeSubstanceReferenceInformation:
-		return "Todo."
-	case ResourceTypeSubstanceSourceMaterial:
-		return "Source material shall capture information on the taxonomic and anatomical origins as well as the fraction of a material that can result in or can be modified to form a substance. This set of data elements shall be used to define polymer substances isolated from biological matrices. Taxonomic and anatomical origins shall be described using a controlled vocabulary as required. This information is captured for naturally derived polymers ( . starch) and structurally diverse substances. For Organisms belonging to the Kingdom Plantae the Substance level defines the fresh material of a single species or infraspecies, the Herbal Drug and the Herbal preparation. For Herbal preparations, the fraction information will be captured at the Substance information level and additional information for herbal extracts will be captured at the Specified Substance Group 1 information level. See for further explanation the Substance Class: Structurally Diverse and the herbal annex."
-	case ResourceTypeSubstanceSpecification:
+	case ResourceTypeSubstanceDefinition:
 		return "The detailed description of a substance, typically at a level beyond what is used for prescribing."
 	case ResourceTypeSupplyDelivery:
 		return "Record of delivery of what is supplied."
@@ -1387,6 +1340,8 @@ func (code ResourceType) Definition() string {
 		return "Describes validation requirements, source(s), status and dates for one or more elements."
 	case ResourceTypeVisionPrescription:
 		return "An authorization for the provision of glasses and/or contact lenses to a patient."
+	case ResourceTypeParameters:
+		return "This resource is a non-persisted resource used to pass information into and back from an [operation](operations.html). It has no other use, and there is no RESTful endpoint associated with it."
 	}
 	return "<unknown>"
 }

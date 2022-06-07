@@ -21,20 +21,20 @@ import "encoding/json"
 
 // Subscription is documented here http://hl7.org/fhir/StructureDefinition/Subscription
 type Subscription struct {
-	Id                *string             `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta               `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string             `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string             `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative          `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension         `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension         `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Status            SubscriptionStatus  `bson:"status" json:"status"`
-	Contact           []ContactPoint      `bson:"contact,omitempty" json:"contact,omitempty"`
-	End               *string             `bson:"end,omitempty" json:"end,omitempty"`
-	Reason            string              `bson:"reason" json:"reason"`
-	Criteria          string              `bson:"criteria" json:"criteria"`
-	Error             *string             `bson:"error,omitempty" json:"error,omitempty"`
-	Channel           SubscriptionChannel `bson:"channel" json:"channel"`
+	Id                *string                 `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta                   `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string                 `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string                 `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative              `bson:"text,omitempty" json:"text,omitempty"`
+	Extension         []Extension             `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension             `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Status            SubscriptionStatusCodes `bson:"status" json:"status"`
+	Contact           []ContactPoint          `bson:"contact,omitempty" json:"contact,omitempty"`
+	End               *string                 `bson:"end,omitempty" json:"end,omitempty"`
+	Reason            string                  `bson:"reason" json:"reason"`
+	Criteria          string                  `bson:"criteria" json:"criteria"`
+	Error             *string                 `bson:"error,omitempty" json:"error,omitempty"`
+	Channel           SubscriptionChannel     `bson:"channel" json:"channel"`
 }
 type SubscriptionChannel struct {
 	Id                *string                 `bson:"id,omitempty" json:"id,omitempty"`

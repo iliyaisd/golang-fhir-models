@@ -35,7 +35,7 @@ type PaymentReconciliation struct {
 	PaymentIssuer     *Reference                         `bson:"paymentIssuer,omitempty" json:"paymentIssuer,omitempty"`
 	Request           *Reference                         `bson:"request,omitempty" json:"request,omitempty"`
 	Requestor         *Reference                         `bson:"requestor,omitempty" json:"requestor,omitempty"`
-	Outcome           *ClaimProcessingCodes              `bson:"outcome,omitempty" json:"outcome,omitempty"`
+	Outcome           *RemittanceOutcome                 `bson:"outcome,omitempty" json:"outcome,omitempty"`
 	Disposition       *string                            `bson:"disposition,omitempty" json:"disposition,omitempty"`
 	PaymentDate       string                             `bson:"paymentDate" json:"paymentDate"`
 	PaymentAmount     Money                              `bson:"paymentAmount" json:"paymentAmount"`

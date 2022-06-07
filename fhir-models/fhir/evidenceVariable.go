@@ -21,50 +21,63 @@ import "encoding/json"
 
 // EvidenceVariable is documented here http://hl7.org/fhir/StructureDefinition/EvidenceVariable
 type EvidenceVariable struct {
-	Id                *string                          `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta                            `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string                          `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string                          `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative                       `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension                      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension                      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Url               *string                          `bson:"url,omitempty" json:"url,omitempty"`
-	Identifier        []Identifier                     `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Version           *string                          `bson:"version,omitempty" json:"version,omitempty"`
-	Name              *string                          `bson:"name,omitempty" json:"name,omitempty"`
-	Title             *string                          `bson:"title,omitempty" json:"title,omitempty"`
-	ShortTitle        *string                          `bson:"shortTitle,omitempty" json:"shortTitle,omitempty"`
-	Subtitle          *string                          `bson:"subtitle,omitempty" json:"subtitle,omitempty"`
-	Status            PublicationStatus                `bson:"status" json:"status"`
-	Date              *string                          `bson:"date,omitempty" json:"date,omitempty"`
-	Publisher         *string                          `bson:"publisher,omitempty" json:"publisher,omitempty"`
-	Contact           []ContactDetail                  `bson:"contact,omitempty" json:"contact,omitempty"`
-	Description       *string                          `bson:"description,omitempty" json:"description,omitempty"`
-	Note              []Annotation                     `bson:"note,omitempty" json:"note,omitempty"`
-	UseContext        []UsageContext                   `bson:"useContext,omitempty" json:"useContext,omitempty"`
-	Jurisdiction      []CodeableConcept                `bson:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
-	Copyright         *string                          `bson:"copyright,omitempty" json:"copyright,omitempty"`
-	ApprovalDate      *string                          `bson:"approvalDate,omitempty" json:"approvalDate,omitempty"`
-	LastReviewDate    *string                          `bson:"lastReviewDate,omitempty" json:"lastReviewDate,omitempty"`
-	EffectivePeriod   *Period                          `bson:"effectivePeriod,omitempty" json:"effectivePeriod,omitempty"`
-	Topic             []CodeableConcept                `bson:"topic,omitempty" json:"topic,omitempty"`
-	Author            []ContactDetail                  `bson:"author,omitempty" json:"author,omitempty"`
-	Editor            []ContactDetail                  `bson:"editor,omitempty" json:"editor,omitempty"`
-	Reviewer          []ContactDetail                  `bson:"reviewer,omitempty" json:"reviewer,omitempty"`
-	Endorser          []ContactDetail                  `bson:"endorser,omitempty" json:"endorser,omitempty"`
-	RelatedArtifact   []RelatedArtifact                `bson:"relatedArtifact,omitempty" json:"relatedArtifact,omitempty"`
-	Type              *EvidenceVariableType            `bson:"type,omitempty" json:"type,omitempty"`
-	Characteristic    []EvidenceVariableCharacteristic `bson:"characteristic" json:"characteristic"`
+	Id                        *string                          `bson:"id,omitempty" json:"id,omitempty"`
+	Meta                      *Meta                            `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules             *string                          `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language                  *string                          `bson:"language,omitempty" json:"language,omitempty"`
+	Text                      *Narrative                       `bson:"text,omitempty" json:"text,omitempty"`
+	Extension                 []Extension                      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension         []Extension                      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Url                       *string                          `bson:"url,omitempty" json:"url,omitempty"`
+	Identifier                []Identifier                     `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Version                   *string                          `bson:"version,omitempty" json:"version,omitempty"`
+	Name                      *string                          `bson:"name,omitempty" json:"name,omitempty"`
+	Title                     *string                          `bson:"title,omitempty" json:"title,omitempty"`
+	ShortTitle                *string                          `bson:"shortTitle,omitempty" json:"shortTitle,omitempty"`
+	Subtitle                  *string                          `bson:"subtitle,omitempty" json:"subtitle,omitempty"`
+	Status                    PublicationStatus                `bson:"status" json:"status"`
+	Date                      *string                          `bson:"date,omitempty" json:"date,omitempty"`
+	Description               *string                          `bson:"description,omitempty" json:"description,omitempty"`
+	Note                      []Annotation                     `bson:"note,omitempty" json:"note,omitempty"`
+	UseContext                []UsageContext                   `bson:"useContext,omitempty" json:"useContext,omitempty"`
+	Publisher                 *string                          `bson:"publisher,omitempty" json:"publisher,omitempty"`
+	Contact                   []ContactDetail                  `bson:"contact,omitempty" json:"contact,omitempty"`
+	Author                    []ContactDetail                  `bson:"author,omitempty" json:"author,omitempty"`
+	Editor                    []ContactDetail                  `bson:"editor,omitempty" json:"editor,omitempty"`
+	Reviewer                  []ContactDetail                  `bson:"reviewer,omitempty" json:"reviewer,omitempty"`
+	Endorser                  []ContactDetail                  `bson:"endorser,omitempty" json:"endorser,omitempty"`
+	RelatedArtifact           []RelatedArtifact                `bson:"relatedArtifact,omitempty" json:"relatedArtifact,omitempty"`
+	Actual                    *bool                            `bson:"actual,omitempty" json:"actual,omitempty"`
+	CharacteristicCombination *CharacteristicCombination       `bson:"characteristicCombination,omitempty" json:"characteristicCombination,omitempty"`
+	Characteristic            []EvidenceVariableCharacteristic `bson:"characteristic,omitempty" json:"characteristic,omitempty"`
+	Handling                  *EvidenceVariableHandling        `bson:"handling,omitempty" json:"handling,omitempty"`
+	Category                  []EvidenceVariableCategory       `bson:"category,omitempty" json:"category,omitempty"`
 }
 type EvidenceVariableCharacteristic struct {
-	Id                *string        `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension    `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension    `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Description       *string        `bson:"description,omitempty" json:"description,omitempty"`
-	UsageContext      []UsageContext `bson:"usageContext,omitempty" json:"usageContext,omitempty"`
-	Exclude           *bool          `bson:"exclude,omitempty" json:"exclude,omitempty"`
-	TimeFromStart     *Duration      `bson:"timeFromStart,omitempty" json:"timeFromStart,omitempty"`
-	GroupMeasure      *GroupMeasure  `bson:"groupMeasure,omitempty" json:"groupMeasure,omitempty"`
+	Id                *string                                      `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension                                  `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension                                  `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Description       *string                                      `bson:"description,omitempty" json:"description,omitempty"`
+	Method            *CodeableConcept                             `bson:"method,omitempty" json:"method,omitempty"`
+	Device            *Reference                                   `bson:"device,omitempty" json:"device,omitempty"`
+	Exclude           *bool                                        `bson:"exclude,omitempty" json:"exclude,omitempty"`
+	TimeFromStart     *EvidenceVariableCharacteristicTimeFromStart `bson:"timeFromStart,omitempty" json:"timeFromStart,omitempty"`
+	GroupMeasure      *GroupMeasure                                `bson:"groupMeasure,omitempty" json:"groupMeasure,omitempty"`
+}
+type EvidenceVariableCharacteristicTimeFromStart struct {
+	Id                *string      `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension  `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension  `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Description       *string      `bson:"description,omitempty" json:"description,omitempty"`
+	Quantity          *Quantity    `bson:"quantity,omitempty" json:"quantity,omitempty"`
+	Range             *Range       `bson:"range,omitempty" json:"range,omitempty"`
+	Note              []Annotation `bson:"note,omitempty" json:"note,omitempty"`
+}
+type EvidenceVariableCategory struct {
+	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Name              *string     `bson:"name,omitempty" json:"name,omitempty"`
 }
 type OtherEvidenceVariable EvidenceVariable
 

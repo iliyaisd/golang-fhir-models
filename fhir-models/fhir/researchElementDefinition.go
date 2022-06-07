@@ -58,7 +58,7 @@ type ResearchElementDefinition struct {
 	RelatedArtifact   []RelatedArtifact                         `bson:"relatedArtifact,omitempty" json:"relatedArtifact,omitempty"`
 	Library           []string                                  `bson:"library,omitempty" json:"library,omitempty"`
 	Type              ResearchElementType                       `bson:"type" json:"type"`
-	VariableType      *EvidenceVariableType                     `bson:"variableType,omitempty" json:"variableType,omitempty"`
+	VariableType      *VariableType                             `bson:"variableType,omitempty" json:"variableType,omitempty"`
 	Characteristic    []ResearchElementDefinitionCharacteristic `bson:"characteristic" json:"characteristic"`
 }
 type ResearchElementDefinitionCharacteristic struct {

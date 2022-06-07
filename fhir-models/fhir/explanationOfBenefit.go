@@ -50,7 +50,7 @@ type ExplanationOfBenefit struct {
 	Facility              *Reference                             `bson:"facility,omitempty" json:"facility,omitempty"`
 	Claim                 *Reference                             `bson:"claim,omitempty" json:"claim,omitempty"`
 	ClaimResponse         *Reference                             `bson:"claimResponse,omitempty" json:"claimResponse,omitempty"`
-	Outcome               ClaimProcessingCodes                   `bson:"outcome" json:"outcome"`
+	Outcome               RemittanceOutcome                      `bson:"outcome" json:"outcome"`
 	Disposition           *string                                `bson:"disposition,omitempty" json:"disposition,omitempty"`
 	PreAuthRef            []string                               `bson:"preAuthRef,omitempty" json:"preAuthRef,omitempty"`
 	PreAuthRefPeriod      []Period                               `bson:"preAuthRefPeriod,omitempty" json:"preAuthRefPeriod,omitempty"`

@@ -49,6 +49,7 @@ const (
 	FHIRVersion3_5_0
 	FHIRVersion4_0_0
 	FHIRVersion4_0_1
+	FHIRVersion4_3_0
 )
 
 func (code FHIRVersion) MarshalJSON() ([]byte, error) {
@@ -101,6 +102,8 @@ func (code *FHIRVersion) UnmarshalJSON(json []byte) error {
 		*code = FHIRVersion4_0_0
 	case "4.0.1":
 		*code = FHIRVersion4_0_1
+	case "4.3.0":
+		*code = FHIRVersion4_3_0
 	default:
 		return fmt.Errorf("unknown FHIRVersion code `%s`", s)
 	}
@@ -155,6 +158,8 @@ func (code FHIRVersion) Code() string {
 		return "4.0.0"
 	case FHIRVersion4_0_1:
 		return "4.0.1"
+	case FHIRVersion4_3_0:
+		return "4.3.0"
 	}
 	return "<unknown>"
 }
@@ -204,6 +209,8 @@ func (code FHIRVersion) Display() string {
 		return "4.0.0"
 	case FHIRVersion4_0_1:
 		return "4.0.1"
+	case FHIRVersion4_3_0:
+		return "4.3.0"
 	}
 	return "<unknown>"
 }

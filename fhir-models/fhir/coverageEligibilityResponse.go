@@ -35,7 +35,7 @@ type CoverageEligibilityResponse struct {
 	Created           string                                 `bson:"created" json:"created"`
 	Requestor         *Reference                             `bson:"requestor,omitempty" json:"requestor,omitempty"`
 	Request           Reference                              `bson:"request" json:"request"`
-	Outcome           ClaimProcessingCodes                   `bson:"outcome" json:"outcome"`
+	Outcome           RemittanceOutcome                      `bson:"outcome" json:"outcome"`
 	Disposition       *string                                `bson:"disposition,omitempty" json:"disposition,omitempty"`
 	Insurer           Reference                              `bson:"insurer" json:"insurer"`
 	Insurance         []CoverageEligibilityResponseInsurance `bson:"insurance,omitempty" json:"insurance,omitempty"`

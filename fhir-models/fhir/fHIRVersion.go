@@ -45,10 +45,15 @@ const (
 	FHIRVersion1_8_0
 	FHIRVersion3_0_0
 	FHIRVersion3_0_1
+	FHIRVersion3_0_2
 	FHIRVersion3_3_0
 	FHIRVersion3_5_0
 	FHIRVersion4_0_0
 	FHIRVersion4_0_1
+	FHIRVersion4_1_0
+	FHIRVersion4_3_0Cibuild
+	FHIRVersion4_3_0Snapshot1
+	FHIRVersion4_3_0
 )
 
 func (code FHIRVersion) MarshalJSON() ([]byte, error) {
@@ -93,6 +98,8 @@ func (code *FHIRVersion) UnmarshalJSON(json []byte) error {
 		*code = FHIRVersion3_0_0
 	case "3.0.1":
 		*code = FHIRVersion3_0_1
+	case "3.0.2":
+		*code = FHIRVersion3_0_2
 	case "3.3.0":
 		*code = FHIRVersion3_3_0
 	case "3.5.0":
@@ -101,6 +108,14 @@ func (code *FHIRVersion) UnmarshalJSON(json []byte) error {
 		*code = FHIRVersion4_0_0
 	case "4.0.1":
 		*code = FHIRVersion4_0_1
+	case "4.1.0":
+		*code = FHIRVersion4_1_0
+	case "4.3.0-cibuild":
+		*code = FHIRVersion4_3_0Cibuild
+	case "4.3.0-snapshot1":
+		*code = FHIRVersion4_3_0Snapshot1
+	case "4.3.0":
+		*code = FHIRVersion4_3_0
 	default:
 		return fmt.Errorf("unknown FHIRVersion code `%s`", s)
 	}
@@ -147,6 +162,8 @@ func (code FHIRVersion) Code() string {
 		return "3.0.0"
 	case FHIRVersion3_0_1:
 		return "3.0.1"
+	case FHIRVersion3_0_2:
+		return "3.0.2"
 	case FHIRVersion3_3_0:
 		return "3.3.0"
 	case FHIRVersion3_5_0:
@@ -155,6 +172,14 @@ func (code FHIRVersion) Code() string {
 		return "4.0.0"
 	case FHIRVersion4_0_1:
 		return "4.0.1"
+	case FHIRVersion4_1_0:
+		return "4.1.0"
+	case FHIRVersion4_3_0Cibuild:
+		return "4.3.0-cibuild"
+	case FHIRVersion4_3_0Snapshot1:
+		return "4.3.0-snapshot1"
+	case FHIRVersion4_3_0:
+		return "4.3.0"
 	}
 	return "<unknown>"
 }
@@ -196,6 +221,8 @@ func (code FHIRVersion) Display() string {
 		return "3.0.0"
 	case FHIRVersion3_0_1:
 		return "3.0.1"
+	case FHIRVersion3_0_2:
+		return "3.0.2"
 	case FHIRVersion3_3_0:
 		return "3.3.0"
 	case FHIRVersion3_5_0:
@@ -204,6 +231,14 @@ func (code FHIRVersion) Display() string {
 		return "4.0.0"
 	case FHIRVersion4_0_1:
 		return "4.0.1"
+	case FHIRVersion4_1_0:
+		return "4.1.0"
+	case FHIRVersion4_3_0Cibuild:
+		return "4.3.0-cibuild"
+	case FHIRVersion4_3_0Snapshot1:
+		return "4.3.0-snapshot1"
+	case FHIRVersion4_3_0:
+		return "4.3.0"
 	}
 	return "<unknown>"
 }
@@ -245,6 +280,8 @@ func (code FHIRVersion) Definition() string {
 		return "FHIR Release 3 (STU)."
 	case FHIRVersion3_0_1:
 		return "FHIR Release 3 (STU) with 1 technical errata."
+	case FHIRVersion3_0_2:
+		return "FHIR Release 3 (STU) with 2 technical errata."
 	case FHIRVersion3_3_0:
 		return "R4 Ballot #1."
 	case FHIRVersion3_5_0:
@@ -253,6 +290,14 @@ func (code FHIRVersion) Definition() string {
 		return "FHIR Release 4 (Normative + STU)."
 	case FHIRVersion4_0_1:
 		return "FHIR Release 4 Technical Correction."
+	case FHIRVersion4_1_0:
+		return "FHIR Release 4B Ballot #1."
+	case FHIRVersion4_3_0Cibuild:
+		return "FHIR Release 4B CI-Build."
+	case FHIRVersion4_3_0Snapshot1:
+		return "FHIR Release 4B Snapshot #1."
+	case FHIRVersion4_3_0:
+		return "FHIR Release 4B."
 	}
 	return "<unknown>"
 }

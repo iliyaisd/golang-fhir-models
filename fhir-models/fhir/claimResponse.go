@@ -38,7 +38,7 @@ type ClaimResponse struct {
 	Insurer              Reference                       `bson:"insurer" json:"insurer"`
 	Requestor            *Reference                      `bson:"requestor,omitempty" json:"requestor,omitempty"`
 	Request              *Reference                      `bson:"request,omitempty" json:"request,omitempty"`
-	Outcome              ClaimProcessingCodes            `bson:"outcome" json:"outcome"`
+	Outcome              RemittanceOutcome               `bson:"outcome" json:"outcome"`
 	Disposition          *string                         `bson:"disposition,omitempty" json:"disposition,omitempty"`
 	PreAuthRef           *string                         `bson:"preAuthRef,omitempty" json:"preAuthRef,omitempty"`
 	PreAuthPeriod        *Period                         `bson:"preAuthPeriod,omitempty" json:"preAuthPeriod,omitempty"`

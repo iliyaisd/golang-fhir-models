@@ -27,27 +27,32 @@ import (
 type CarePlanActivityKind int
 
 const (
-	CarePlanActivityKindAccount CarePlanActivityKind = iota
+	CarePlanActivityKindResource CarePlanActivityKind = iota
+	CarePlanActivityKindBinary
+	CarePlanActivityKindBundle
+	CarePlanActivityKindDomainResource
+	CarePlanActivityKindAccount
 	CarePlanActivityKindActivityDefinition
+	CarePlanActivityKindAdministrableProductDefinition
 	CarePlanActivityKindAdverseEvent
 	CarePlanActivityKindAllergyIntolerance
 	CarePlanActivityKindAppointment
 	CarePlanActivityKindAppointmentResponse
 	CarePlanActivityKindAuditEvent
 	CarePlanActivityKindBasic
-	CarePlanActivityKindBinary
 	CarePlanActivityKindBiologicallyDerivedProduct
 	CarePlanActivityKindBodyStructure
-	CarePlanActivityKindBundle
 	CarePlanActivityKindCapabilityStatement
 	CarePlanActivityKindCarePlan
 	CarePlanActivityKindCareTeam
 	CarePlanActivityKindCatalogEntry
 	CarePlanActivityKindChargeItem
 	CarePlanActivityKindChargeItemDefinition
+	CarePlanActivityKindCitation
 	CarePlanActivityKindClaim
 	CarePlanActivityKindClaimResponse
 	CarePlanActivityKindClinicalImpression
+	CarePlanActivityKindClinicalUseDefinition
 	CarePlanActivityKindCodeSystem
 	CarePlanActivityKindCommunication
 	CarePlanActivityKindCommunicationRequest
@@ -69,8 +74,6 @@ const (
 	CarePlanActivityKindDiagnosticReport
 	CarePlanActivityKindDocumentManifest
 	CarePlanActivityKindDocumentReference
-	CarePlanActivityKindDomainResource
-	CarePlanActivityKindEffectEvidenceSynthesis
 	CarePlanActivityKindEncounter
 	CarePlanActivityKindEndpoint
 	CarePlanActivityKindEnrollmentRequest
@@ -78,6 +81,7 @@ const (
 	CarePlanActivityKindEpisodeOfCare
 	CarePlanActivityKindEventDefinition
 	CarePlanActivityKindEvidence
+	CarePlanActivityKindEvidenceReport
 	CarePlanActivityKindEvidenceVariable
 	CarePlanActivityKindExampleScenario
 	CarePlanActivityKindExplanationOfBenefit
@@ -93,12 +97,14 @@ const (
 	CarePlanActivityKindImmunizationEvaluation
 	CarePlanActivityKindImmunizationRecommendation
 	CarePlanActivityKindImplementationGuide
+	CarePlanActivityKindIngredient
 	CarePlanActivityKindInsurancePlan
 	CarePlanActivityKindInvoice
 	CarePlanActivityKindLibrary
 	CarePlanActivityKindLinkage
 	CarePlanActivityKindList
 	CarePlanActivityKindLocation
+	CarePlanActivityKindManufacturedItemDefinition
 	CarePlanActivityKindMeasure
 	CarePlanActivityKindMeasureReport
 	CarePlanActivityKindMedia
@@ -108,28 +114,20 @@ const (
 	CarePlanActivityKindMedicationKnowledge
 	CarePlanActivityKindMedicationRequest
 	CarePlanActivityKindMedicationStatement
-	CarePlanActivityKindMedicinalProduct
-	CarePlanActivityKindMedicinalProductAuthorization
-	CarePlanActivityKindMedicinalProductContraindication
-	CarePlanActivityKindMedicinalProductIndication
-	CarePlanActivityKindMedicinalProductIngredient
-	CarePlanActivityKindMedicinalProductInteraction
-	CarePlanActivityKindMedicinalProductManufactured
-	CarePlanActivityKindMedicinalProductPackaged
-	CarePlanActivityKindMedicinalProductPharmaceutical
-	CarePlanActivityKindMedicinalProductUndesirableEffect
+	CarePlanActivityKindMedicinalProductDefinition
 	CarePlanActivityKindMessageDefinition
 	CarePlanActivityKindMessageHeader
 	CarePlanActivityKindMolecularSequence
 	CarePlanActivityKindNamingSystem
 	CarePlanActivityKindNutritionOrder
+	CarePlanActivityKindNutritionProduct
 	CarePlanActivityKindObservation
 	CarePlanActivityKindObservationDefinition
 	CarePlanActivityKindOperationDefinition
 	CarePlanActivityKindOperationOutcome
 	CarePlanActivityKindOrganization
 	CarePlanActivityKindOrganizationAffiliation
-	CarePlanActivityKindParameters
+	CarePlanActivityKindPackagedProductDefinition
 	CarePlanActivityKindPatient
 	CarePlanActivityKindPaymentNotice
 	CarePlanActivityKindPaymentReconciliation
@@ -141,15 +139,14 @@ const (
 	CarePlanActivityKindProvenance
 	CarePlanActivityKindQuestionnaire
 	CarePlanActivityKindQuestionnaireResponse
+	CarePlanActivityKindRegulatedAuthorization
 	CarePlanActivityKindRelatedPerson
 	CarePlanActivityKindRequestGroup
 	CarePlanActivityKindResearchDefinition
 	CarePlanActivityKindResearchElementDefinition
 	CarePlanActivityKindResearchStudy
 	CarePlanActivityKindResearchSubject
-	CarePlanActivityKindResource
 	CarePlanActivityKindRiskAssessment
-	CarePlanActivityKindRiskEvidenceSynthesis
 	CarePlanActivityKindSchedule
 	CarePlanActivityKindSearchParameter
 	CarePlanActivityKindServiceRequest
@@ -159,13 +156,10 @@ const (
 	CarePlanActivityKindStructureDefinition
 	CarePlanActivityKindStructureMap
 	CarePlanActivityKindSubscription
+	CarePlanActivityKindSubscriptionStatus
+	CarePlanActivityKindSubscriptionTopic
 	CarePlanActivityKindSubstance
-	CarePlanActivityKindSubstanceNucleicAcid
-	CarePlanActivityKindSubstancePolymer
-	CarePlanActivityKindSubstanceProtein
-	CarePlanActivityKindSubstanceReferenceInformation
-	CarePlanActivityKindSubstanceSourceMaterial
-	CarePlanActivityKindSubstanceSpecification
+	CarePlanActivityKindSubstanceDefinition
 	CarePlanActivityKindSupplyDelivery
 	CarePlanActivityKindSupplyRequest
 	CarePlanActivityKindTask
@@ -175,6 +169,7 @@ const (
 	CarePlanActivityKindValueSet
 	CarePlanActivityKindVerificationResult
 	CarePlanActivityKindVisionPrescription
+	CarePlanActivityKindParameters
 )
 
 func (code CarePlanActivityKind) MarshalJSON() ([]byte, error) {
@@ -183,10 +178,20 @@ func (code CarePlanActivityKind) MarshalJSON() ([]byte, error) {
 func (code *CarePlanActivityKind) UnmarshalJSON(json []byte) error {
 	s := strings.Trim(string(json), "\"")
 	switch s {
+	case "Resource":
+		*code = CarePlanActivityKindResource
+	case "Binary":
+		*code = CarePlanActivityKindBinary
+	case "Bundle":
+		*code = CarePlanActivityKindBundle
+	case "DomainResource":
+		*code = CarePlanActivityKindDomainResource
 	case "Account":
 		*code = CarePlanActivityKindAccount
 	case "ActivityDefinition":
 		*code = CarePlanActivityKindActivityDefinition
+	case "AdministrableProductDefinition":
+		*code = CarePlanActivityKindAdministrableProductDefinition
 	case "AdverseEvent":
 		*code = CarePlanActivityKindAdverseEvent
 	case "AllergyIntolerance":
@@ -199,14 +204,10 @@ func (code *CarePlanActivityKind) UnmarshalJSON(json []byte) error {
 		*code = CarePlanActivityKindAuditEvent
 	case "Basic":
 		*code = CarePlanActivityKindBasic
-	case "Binary":
-		*code = CarePlanActivityKindBinary
 	case "BiologicallyDerivedProduct":
 		*code = CarePlanActivityKindBiologicallyDerivedProduct
 	case "BodyStructure":
 		*code = CarePlanActivityKindBodyStructure
-	case "Bundle":
-		*code = CarePlanActivityKindBundle
 	case "CapabilityStatement":
 		*code = CarePlanActivityKindCapabilityStatement
 	case "CarePlan":
@@ -219,12 +220,16 @@ func (code *CarePlanActivityKind) UnmarshalJSON(json []byte) error {
 		*code = CarePlanActivityKindChargeItem
 	case "ChargeItemDefinition":
 		*code = CarePlanActivityKindChargeItemDefinition
+	case "Citation":
+		*code = CarePlanActivityKindCitation
 	case "Claim":
 		*code = CarePlanActivityKindClaim
 	case "ClaimResponse":
 		*code = CarePlanActivityKindClaimResponse
 	case "ClinicalImpression":
 		*code = CarePlanActivityKindClinicalImpression
+	case "ClinicalUseDefinition":
+		*code = CarePlanActivityKindClinicalUseDefinition
 	case "CodeSystem":
 		*code = CarePlanActivityKindCodeSystem
 	case "Communication":
@@ -267,10 +272,6 @@ func (code *CarePlanActivityKind) UnmarshalJSON(json []byte) error {
 		*code = CarePlanActivityKindDocumentManifest
 	case "DocumentReference":
 		*code = CarePlanActivityKindDocumentReference
-	case "DomainResource":
-		*code = CarePlanActivityKindDomainResource
-	case "EffectEvidenceSynthesis":
-		*code = CarePlanActivityKindEffectEvidenceSynthesis
 	case "Encounter":
 		*code = CarePlanActivityKindEncounter
 	case "Endpoint":
@@ -285,6 +286,8 @@ func (code *CarePlanActivityKind) UnmarshalJSON(json []byte) error {
 		*code = CarePlanActivityKindEventDefinition
 	case "Evidence":
 		*code = CarePlanActivityKindEvidence
+	case "EvidenceReport":
+		*code = CarePlanActivityKindEvidenceReport
 	case "EvidenceVariable":
 		*code = CarePlanActivityKindEvidenceVariable
 	case "ExampleScenario":
@@ -315,6 +318,8 @@ func (code *CarePlanActivityKind) UnmarshalJSON(json []byte) error {
 		*code = CarePlanActivityKindImmunizationRecommendation
 	case "ImplementationGuide":
 		*code = CarePlanActivityKindImplementationGuide
+	case "Ingredient":
+		*code = CarePlanActivityKindIngredient
 	case "InsurancePlan":
 		*code = CarePlanActivityKindInsurancePlan
 	case "Invoice":
@@ -327,6 +332,8 @@ func (code *CarePlanActivityKind) UnmarshalJSON(json []byte) error {
 		*code = CarePlanActivityKindList
 	case "Location":
 		*code = CarePlanActivityKindLocation
+	case "ManufacturedItemDefinition":
+		*code = CarePlanActivityKindManufacturedItemDefinition
 	case "Measure":
 		*code = CarePlanActivityKindMeasure
 	case "MeasureReport":
@@ -345,26 +352,8 @@ func (code *CarePlanActivityKind) UnmarshalJSON(json []byte) error {
 		*code = CarePlanActivityKindMedicationRequest
 	case "MedicationStatement":
 		*code = CarePlanActivityKindMedicationStatement
-	case "MedicinalProduct":
-		*code = CarePlanActivityKindMedicinalProduct
-	case "MedicinalProductAuthorization":
-		*code = CarePlanActivityKindMedicinalProductAuthorization
-	case "MedicinalProductContraindication":
-		*code = CarePlanActivityKindMedicinalProductContraindication
-	case "MedicinalProductIndication":
-		*code = CarePlanActivityKindMedicinalProductIndication
-	case "MedicinalProductIngredient":
-		*code = CarePlanActivityKindMedicinalProductIngredient
-	case "MedicinalProductInteraction":
-		*code = CarePlanActivityKindMedicinalProductInteraction
-	case "MedicinalProductManufactured":
-		*code = CarePlanActivityKindMedicinalProductManufactured
-	case "MedicinalProductPackaged":
-		*code = CarePlanActivityKindMedicinalProductPackaged
-	case "MedicinalProductPharmaceutical":
-		*code = CarePlanActivityKindMedicinalProductPharmaceutical
-	case "MedicinalProductUndesirableEffect":
-		*code = CarePlanActivityKindMedicinalProductUndesirableEffect
+	case "MedicinalProductDefinition":
+		*code = CarePlanActivityKindMedicinalProductDefinition
 	case "MessageDefinition":
 		*code = CarePlanActivityKindMessageDefinition
 	case "MessageHeader":
@@ -375,6 +364,8 @@ func (code *CarePlanActivityKind) UnmarshalJSON(json []byte) error {
 		*code = CarePlanActivityKindNamingSystem
 	case "NutritionOrder":
 		*code = CarePlanActivityKindNutritionOrder
+	case "NutritionProduct":
+		*code = CarePlanActivityKindNutritionProduct
 	case "Observation":
 		*code = CarePlanActivityKindObservation
 	case "ObservationDefinition":
@@ -387,8 +378,8 @@ func (code *CarePlanActivityKind) UnmarshalJSON(json []byte) error {
 		*code = CarePlanActivityKindOrganization
 	case "OrganizationAffiliation":
 		*code = CarePlanActivityKindOrganizationAffiliation
-	case "Parameters":
-		*code = CarePlanActivityKindParameters
+	case "PackagedProductDefinition":
+		*code = CarePlanActivityKindPackagedProductDefinition
 	case "Patient":
 		*code = CarePlanActivityKindPatient
 	case "PaymentNotice":
@@ -411,6 +402,8 @@ func (code *CarePlanActivityKind) UnmarshalJSON(json []byte) error {
 		*code = CarePlanActivityKindQuestionnaire
 	case "QuestionnaireResponse":
 		*code = CarePlanActivityKindQuestionnaireResponse
+	case "RegulatedAuthorization":
+		*code = CarePlanActivityKindRegulatedAuthorization
 	case "RelatedPerson":
 		*code = CarePlanActivityKindRelatedPerson
 	case "RequestGroup":
@@ -423,12 +416,8 @@ func (code *CarePlanActivityKind) UnmarshalJSON(json []byte) error {
 		*code = CarePlanActivityKindResearchStudy
 	case "ResearchSubject":
 		*code = CarePlanActivityKindResearchSubject
-	case "Resource":
-		*code = CarePlanActivityKindResource
 	case "RiskAssessment":
 		*code = CarePlanActivityKindRiskAssessment
-	case "RiskEvidenceSynthesis":
-		*code = CarePlanActivityKindRiskEvidenceSynthesis
 	case "Schedule":
 		*code = CarePlanActivityKindSchedule
 	case "SearchParameter":
@@ -447,20 +436,14 @@ func (code *CarePlanActivityKind) UnmarshalJSON(json []byte) error {
 		*code = CarePlanActivityKindStructureMap
 	case "Subscription":
 		*code = CarePlanActivityKindSubscription
+	case "SubscriptionStatus":
+		*code = CarePlanActivityKindSubscriptionStatus
+	case "SubscriptionTopic":
+		*code = CarePlanActivityKindSubscriptionTopic
 	case "Substance":
 		*code = CarePlanActivityKindSubstance
-	case "SubstanceNucleicAcid":
-		*code = CarePlanActivityKindSubstanceNucleicAcid
-	case "SubstancePolymer":
-		*code = CarePlanActivityKindSubstancePolymer
-	case "SubstanceProtein":
-		*code = CarePlanActivityKindSubstanceProtein
-	case "SubstanceReferenceInformation":
-		*code = CarePlanActivityKindSubstanceReferenceInformation
-	case "SubstanceSourceMaterial":
-		*code = CarePlanActivityKindSubstanceSourceMaterial
-	case "SubstanceSpecification":
-		*code = CarePlanActivityKindSubstanceSpecification
+	case "SubstanceDefinition":
+		*code = CarePlanActivityKindSubstanceDefinition
 	case "SupplyDelivery":
 		*code = CarePlanActivityKindSupplyDelivery
 	case "SupplyRequest":
@@ -479,6 +462,8 @@ func (code *CarePlanActivityKind) UnmarshalJSON(json []byte) error {
 		*code = CarePlanActivityKindVerificationResult
 	case "VisionPrescription":
 		*code = CarePlanActivityKindVisionPrescription
+	case "Parameters":
+		*code = CarePlanActivityKindParameters
 	default:
 		return fmt.Errorf("unknown CarePlanActivityKind code `%s`", s)
 	}
@@ -489,10 +474,20 @@ func (code CarePlanActivityKind) String() string {
 }
 func (code CarePlanActivityKind) Code() string {
 	switch code {
+	case CarePlanActivityKindResource:
+		return "Resource"
+	case CarePlanActivityKindBinary:
+		return "Binary"
+	case CarePlanActivityKindBundle:
+		return "Bundle"
+	case CarePlanActivityKindDomainResource:
+		return "DomainResource"
 	case CarePlanActivityKindAccount:
 		return "Account"
 	case CarePlanActivityKindActivityDefinition:
 		return "ActivityDefinition"
+	case CarePlanActivityKindAdministrableProductDefinition:
+		return "AdministrableProductDefinition"
 	case CarePlanActivityKindAdverseEvent:
 		return "AdverseEvent"
 	case CarePlanActivityKindAllergyIntolerance:
@@ -505,14 +500,10 @@ func (code CarePlanActivityKind) Code() string {
 		return "AuditEvent"
 	case CarePlanActivityKindBasic:
 		return "Basic"
-	case CarePlanActivityKindBinary:
-		return "Binary"
 	case CarePlanActivityKindBiologicallyDerivedProduct:
 		return "BiologicallyDerivedProduct"
 	case CarePlanActivityKindBodyStructure:
 		return "BodyStructure"
-	case CarePlanActivityKindBundle:
-		return "Bundle"
 	case CarePlanActivityKindCapabilityStatement:
 		return "CapabilityStatement"
 	case CarePlanActivityKindCarePlan:
@@ -525,12 +516,16 @@ func (code CarePlanActivityKind) Code() string {
 		return "ChargeItem"
 	case CarePlanActivityKindChargeItemDefinition:
 		return "ChargeItemDefinition"
+	case CarePlanActivityKindCitation:
+		return "Citation"
 	case CarePlanActivityKindClaim:
 		return "Claim"
 	case CarePlanActivityKindClaimResponse:
 		return "ClaimResponse"
 	case CarePlanActivityKindClinicalImpression:
 		return "ClinicalImpression"
+	case CarePlanActivityKindClinicalUseDefinition:
+		return "ClinicalUseDefinition"
 	case CarePlanActivityKindCodeSystem:
 		return "CodeSystem"
 	case CarePlanActivityKindCommunication:
@@ -573,10 +568,6 @@ func (code CarePlanActivityKind) Code() string {
 		return "DocumentManifest"
 	case CarePlanActivityKindDocumentReference:
 		return "DocumentReference"
-	case CarePlanActivityKindDomainResource:
-		return "DomainResource"
-	case CarePlanActivityKindEffectEvidenceSynthesis:
-		return "EffectEvidenceSynthesis"
 	case CarePlanActivityKindEncounter:
 		return "Encounter"
 	case CarePlanActivityKindEndpoint:
@@ -591,6 +582,8 @@ func (code CarePlanActivityKind) Code() string {
 		return "EventDefinition"
 	case CarePlanActivityKindEvidence:
 		return "Evidence"
+	case CarePlanActivityKindEvidenceReport:
+		return "EvidenceReport"
 	case CarePlanActivityKindEvidenceVariable:
 		return "EvidenceVariable"
 	case CarePlanActivityKindExampleScenario:
@@ -621,6 +614,8 @@ func (code CarePlanActivityKind) Code() string {
 		return "ImmunizationRecommendation"
 	case CarePlanActivityKindImplementationGuide:
 		return "ImplementationGuide"
+	case CarePlanActivityKindIngredient:
+		return "Ingredient"
 	case CarePlanActivityKindInsurancePlan:
 		return "InsurancePlan"
 	case CarePlanActivityKindInvoice:
@@ -633,6 +628,8 @@ func (code CarePlanActivityKind) Code() string {
 		return "List"
 	case CarePlanActivityKindLocation:
 		return "Location"
+	case CarePlanActivityKindManufacturedItemDefinition:
+		return "ManufacturedItemDefinition"
 	case CarePlanActivityKindMeasure:
 		return "Measure"
 	case CarePlanActivityKindMeasureReport:
@@ -651,26 +648,8 @@ func (code CarePlanActivityKind) Code() string {
 		return "MedicationRequest"
 	case CarePlanActivityKindMedicationStatement:
 		return "MedicationStatement"
-	case CarePlanActivityKindMedicinalProduct:
-		return "MedicinalProduct"
-	case CarePlanActivityKindMedicinalProductAuthorization:
-		return "MedicinalProductAuthorization"
-	case CarePlanActivityKindMedicinalProductContraindication:
-		return "MedicinalProductContraindication"
-	case CarePlanActivityKindMedicinalProductIndication:
-		return "MedicinalProductIndication"
-	case CarePlanActivityKindMedicinalProductIngredient:
-		return "MedicinalProductIngredient"
-	case CarePlanActivityKindMedicinalProductInteraction:
-		return "MedicinalProductInteraction"
-	case CarePlanActivityKindMedicinalProductManufactured:
-		return "MedicinalProductManufactured"
-	case CarePlanActivityKindMedicinalProductPackaged:
-		return "MedicinalProductPackaged"
-	case CarePlanActivityKindMedicinalProductPharmaceutical:
-		return "MedicinalProductPharmaceutical"
-	case CarePlanActivityKindMedicinalProductUndesirableEffect:
-		return "MedicinalProductUndesirableEffect"
+	case CarePlanActivityKindMedicinalProductDefinition:
+		return "MedicinalProductDefinition"
 	case CarePlanActivityKindMessageDefinition:
 		return "MessageDefinition"
 	case CarePlanActivityKindMessageHeader:
@@ -681,6 +660,8 @@ func (code CarePlanActivityKind) Code() string {
 		return "NamingSystem"
 	case CarePlanActivityKindNutritionOrder:
 		return "NutritionOrder"
+	case CarePlanActivityKindNutritionProduct:
+		return "NutritionProduct"
 	case CarePlanActivityKindObservation:
 		return "Observation"
 	case CarePlanActivityKindObservationDefinition:
@@ -693,8 +674,8 @@ func (code CarePlanActivityKind) Code() string {
 		return "Organization"
 	case CarePlanActivityKindOrganizationAffiliation:
 		return "OrganizationAffiliation"
-	case CarePlanActivityKindParameters:
-		return "Parameters"
+	case CarePlanActivityKindPackagedProductDefinition:
+		return "PackagedProductDefinition"
 	case CarePlanActivityKindPatient:
 		return "Patient"
 	case CarePlanActivityKindPaymentNotice:
@@ -717,6 +698,8 @@ func (code CarePlanActivityKind) Code() string {
 		return "Questionnaire"
 	case CarePlanActivityKindQuestionnaireResponse:
 		return "QuestionnaireResponse"
+	case CarePlanActivityKindRegulatedAuthorization:
+		return "RegulatedAuthorization"
 	case CarePlanActivityKindRelatedPerson:
 		return "RelatedPerson"
 	case CarePlanActivityKindRequestGroup:
@@ -729,12 +712,8 @@ func (code CarePlanActivityKind) Code() string {
 		return "ResearchStudy"
 	case CarePlanActivityKindResearchSubject:
 		return "ResearchSubject"
-	case CarePlanActivityKindResource:
-		return "Resource"
 	case CarePlanActivityKindRiskAssessment:
 		return "RiskAssessment"
-	case CarePlanActivityKindRiskEvidenceSynthesis:
-		return "RiskEvidenceSynthesis"
 	case CarePlanActivityKindSchedule:
 		return "Schedule"
 	case CarePlanActivityKindSearchParameter:
@@ -753,20 +732,14 @@ func (code CarePlanActivityKind) Code() string {
 		return "StructureMap"
 	case CarePlanActivityKindSubscription:
 		return "Subscription"
+	case CarePlanActivityKindSubscriptionStatus:
+		return "SubscriptionStatus"
+	case CarePlanActivityKindSubscriptionTopic:
+		return "SubscriptionTopic"
 	case CarePlanActivityKindSubstance:
 		return "Substance"
-	case CarePlanActivityKindSubstanceNucleicAcid:
-		return "SubstanceNucleicAcid"
-	case CarePlanActivityKindSubstancePolymer:
-		return "SubstancePolymer"
-	case CarePlanActivityKindSubstanceProtein:
-		return "SubstanceProtein"
-	case CarePlanActivityKindSubstanceReferenceInformation:
-		return "SubstanceReferenceInformation"
-	case CarePlanActivityKindSubstanceSourceMaterial:
-		return "SubstanceSourceMaterial"
-	case CarePlanActivityKindSubstanceSpecification:
-		return "SubstanceSpecification"
+	case CarePlanActivityKindSubstanceDefinition:
+		return "SubstanceDefinition"
 	case CarePlanActivityKindSupplyDelivery:
 		return "SupplyDelivery"
 	case CarePlanActivityKindSupplyRequest:
@@ -785,15 +758,27 @@ func (code CarePlanActivityKind) Code() string {
 		return "VerificationResult"
 	case CarePlanActivityKindVisionPrescription:
 		return "VisionPrescription"
+	case CarePlanActivityKindParameters:
+		return "Parameters"
 	}
 	return "<unknown>"
 }
 func (code CarePlanActivityKind) Display() string {
 	switch code {
+	case CarePlanActivityKindResource:
+		return "Resource"
+	case CarePlanActivityKindBinary:
+		return "Binary"
+	case CarePlanActivityKindBundle:
+		return "Bundle"
+	case CarePlanActivityKindDomainResource:
+		return "DomainResource"
 	case CarePlanActivityKindAccount:
 		return "Account"
 	case CarePlanActivityKindActivityDefinition:
 		return "ActivityDefinition"
+	case CarePlanActivityKindAdministrableProductDefinition:
+		return "AdministrableProductDefinition"
 	case CarePlanActivityKindAdverseEvent:
 		return "AdverseEvent"
 	case CarePlanActivityKindAllergyIntolerance:
@@ -806,14 +791,10 @@ func (code CarePlanActivityKind) Display() string {
 		return "AuditEvent"
 	case CarePlanActivityKindBasic:
 		return "Basic"
-	case CarePlanActivityKindBinary:
-		return "Binary"
 	case CarePlanActivityKindBiologicallyDerivedProduct:
 		return "BiologicallyDerivedProduct"
 	case CarePlanActivityKindBodyStructure:
 		return "BodyStructure"
-	case CarePlanActivityKindBundle:
-		return "Bundle"
 	case CarePlanActivityKindCapabilityStatement:
 		return "CapabilityStatement"
 	case CarePlanActivityKindCarePlan:
@@ -826,12 +807,16 @@ func (code CarePlanActivityKind) Display() string {
 		return "ChargeItem"
 	case CarePlanActivityKindChargeItemDefinition:
 		return "ChargeItemDefinition"
+	case CarePlanActivityKindCitation:
+		return "Citation"
 	case CarePlanActivityKindClaim:
 		return "Claim"
 	case CarePlanActivityKindClaimResponse:
 		return "ClaimResponse"
 	case CarePlanActivityKindClinicalImpression:
 		return "ClinicalImpression"
+	case CarePlanActivityKindClinicalUseDefinition:
+		return "ClinicalUseDefinition"
 	case CarePlanActivityKindCodeSystem:
 		return "CodeSystem"
 	case CarePlanActivityKindCommunication:
@@ -874,10 +859,6 @@ func (code CarePlanActivityKind) Display() string {
 		return "DocumentManifest"
 	case CarePlanActivityKindDocumentReference:
 		return "DocumentReference"
-	case CarePlanActivityKindDomainResource:
-		return "DomainResource"
-	case CarePlanActivityKindEffectEvidenceSynthesis:
-		return "EffectEvidenceSynthesis"
 	case CarePlanActivityKindEncounter:
 		return "Encounter"
 	case CarePlanActivityKindEndpoint:
@@ -892,6 +873,8 @@ func (code CarePlanActivityKind) Display() string {
 		return "EventDefinition"
 	case CarePlanActivityKindEvidence:
 		return "Evidence"
+	case CarePlanActivityKindEvidenceReport:
+		return "EvidenceReport"
 	case CarePlanActivityKindEvidenceVariable:
 		return "EvidenceVariable"
 	case CarePlanActivityKindExampleScenario:
@@ -922,6 +905,8 @@ func (code CarePlanActivityKind) Display() string {
 		return "ImmunizationRecommendation"
 	case CarePlanActivityKindImplementationGuide:
 		return "ImplementationGuide"
+	case CarePlanActivityKindIngredient:
+		return "Ingredient"
 	case CarePlanActivityKindInsurancePlan:
 		return "InsurancePlan"
 	case CarePlanActivityKindInvoice:
@@ -934,6 +919,8 @@ func (code CarePlanActivityKind) Display() string {
 		return "List"
 	case CarePlanActivityKindLocation:
 		return "Location"
+	case CarePlanActivityKindManufacturedItemDefinition:
+		return "ManufacturedItemDefinition"
 	case CarePlanActivityKindMeasure:
 		return "Measure"
 	case CarePlanActivityKindMeasureReport:
@@ -952,26 +939,8 @@ func (code CarePlanActivityKind) Display() string {
 		return "MedicationRequest"
 	case CarePlanActivityKindMedicationStatement:
 		return "MedicationStatement"
-	case CarePlanActivityKindMedicinalProduct:
-		return "MedicinalProduct"
-	case CarePlanActivityKindMedicinalProductAuthorization:
-		return "MedicinalProductAuthorization"
-	case CarePlanActivityKindMedicinalProductContraindication:
-		return "MedicinalProductContraindication"
-	case CarePlanActivityKindMedicinalProductIndication:
-		return "MedicinalProductIndication"
-	case CarePlanActivityKindMedicinalProductIngredient:
-		return "MedicinalProductIngredient"
-	case CarePlanActivityKindMedicinalProductInteraction:
-		return "MedicinalProductInteraction"
-	case CarePlanActivityKindMedicinalProductManufactured:
-		return "MedicinalProductManufactured"
-	case CarePlanActivityKindMedicinalProductPackaged:
-		return "MedicinalProductPackaged"
-	case CarePlanActivityKindMedicinalProductPharmaceutical:
-		return "MedicinalProductPharmaceutical"
-	case CarePlanActivityKindMedicinalProductUndesirableEffect:
-		return "MedicinalProductUndesirableEffect"
+	case CarePlanActivityKindMedicinalProductDefinition:
+		return "MedicinalProductDefinition"
 	case CarePlanActivityKindMessageDefinition:
 		return "MessageDefinition"
 	case CarePlanActivityKindMessageHeader:
@@ -982,6 +951,8 @@ func (code CarePlanActivityKind) Display() string {
 		return "NamingSystem"
 	case CarePlanActivityKindNutritionOrder:
 		return "NutritionOrder"
+	case CarePlanActivityKindNutritionProduct:
+		return "NutritionProduct"
 	case CarePlanActivityKindObservation:
 		return "Observation"
 	case CarePlanActivityKindObservationDefinition:
@@ -994,8 +965,8 @@ func (code CarePlanActivityKind) Display() string {
 		return "Organization"
 	case CarePlanActivityKindOrganizationAffiliation:
 		return "OrganizationAffiliation"
-	case CarePlanActivityKindParameters:
-		return "Parameters"
+	case CarePlanActivityKindPackagedProductDefinition:
+		return "PackagedProductDefinition"
 	case CarePlanActivityKindPatient:
 		return "Patient"
 	case CarePlanActivityKindPaymentNotice:
@@ -1018,6 +989,8 @@ func (code CarePlanActivityKind) Display() string {
 		return "Questionnaire"
 	case CarePlanActivityKindQuestionnaireResponse:
 		return "QuestionnaireResponse"
+	case CarePlanActivityKindRegulatedAuthorization:
+		return "RegulatedAuthorization"
 	case CarePlanActivityKindRelatedPerson:
 		return "RelatedPerson"
 	case CarePlanActivityKindRequestGroup:
@@ -1030,12 +1003,8 @@ func (code CarePlanActivityKind) Display() string {
 		return "ResearchStudy"
 	case CarePlanActivityKindResearchSubject:
 		return "ResearchSubject"
-	case CarePlanActivityKindResource:
-		return "Resource"
 	case CarePlanActivityKindRiskAssessment:
 		return "RiskAssessment"
-	case CarePlanActivityKindRiskEvidenceSynthesis:
-		return "RiskEvidenceSynthesis"
 	case CarePlanActivityKindSchedule:
 		return "Schedule"
 	case CarePlanActivityKindSearchParameter:
@@ -1054,20 +1023,14 @@ func (code CarePlanActivityKind) Display() string {
 		return "StructureMap"
 	case CarePlanActivityKindSubscription:
 		return "Subscription"
+	case CarePlanActivityKindSubscriptionStatus:
+		return "SubscriptionStatus"
+	case CarePlanActivityKindSubscriptionTopic:
+		return "SubscriptionTopic"
 	case CarePlanActivityKindSubstance:
 		return "Substance"
-	case CarePlanActivityKindSubstanceNucleicAcid:
-		return "SubstanceNucleicAcid"
-	case CarePlanActivityKindSubstancePolymer:
-		return "SubstancePolymer"
-	case CarePlanActivityKindSubstanceProtein:
-		return "SubstanceProtein"
-	case CarePlanActivityKindSubstanceReferenceInformation:
-		return "SubstanceReferenceInformation"
-	case CarePlanActivityKindSubstanceSourceMaterial:
-		return "SubstanceSourceMaterial"
-	case CarePlanActivityKindSubstanceSpecification:
-		return "SubstanceSpecification"
+	case CarePlanActivityKindSubstanceDefinition:
+		return "SubstanceDefinition"
 	case CarePlanActivityKindSupplyDelivery:
 		return "SupplyDelivery"
 	case CarePlanActivityKindSupplyRequest:
@@ -1086,15 +1049,27 @@ func (code CarePlanActivityKind) Display() string {
 		return "VerificationResult"
 	case CarePlanActivityKindVisionPrescription:
 		return "VisionPrescription"
+	case CarePlanActivityKindParameters:
+		return "Parameters"
 	}
 	return "<unknown>"
 }
 func (code CarePlanActivityKind) Definition() string {
 	switch code {
+	case CarePlanActivityKindResource:
+		return "--- Abstract Type! ---This is the base resource type for everything."
+	case CarePlanActivityKindBinary:
+		return "A resource that represents the data of a single raw artifact as digital content accessible in its native format.  A Binary resource can contain any content, whether text, image, pdf, zip archive, etc."
+	case CarePlanActivityKindBundle:
+		return "A container for a collection of resources."
+	case CarePlanActivityKindDomainResource:
+		return "--- Abstract Type! ---A resource that includes narrative, extensions, and contained resources."
 	case CarePlanActivityKindAccount:
 		return "A financial tool for tracking value accrued for a particular purpose.  In the healthcare field, used to track charges for a patient, cost centers, etc."
 	case CarePlanActivityKindActivityDefinition:
 		return "This resource allows for the definition of some activity to be performed, independent of a particular patient, practitioner, or other performance context."
+	case CarePlanActivityKindAdministrableProductDefinition:
+		return "A medicinal product in the final form which is suitable for administering to a patient (after any mixing of multiple components, dissolution etc. has been performed)."
 	case CarePlanActivityKindAdverseEvent:
 		return "Actual or  potential/avoided event causing unintended physical injury resulting from or contributed to by medical care, a research study or other healthcare setting factors that requires additional monitoring, treatment, or hospitalization, or that results in death."
 	case CarePlanActivityKindAllergyIntolerance:
@@ -1107,14 +1082,10 @@ func (code CarePlanActivityKind) Definition() string {
 		return "A record of an event made for purposes of maintaining a security log. Typical uses include detection of intrusion attempts and monitoring for inappropriate usage."
 	case CarePlanActivityKindBasic:
 		return "Basic is used for handling concepts not yet defined in FHIR, narrative-only resources that don't map to an existing resource, and custom resources not appropriate for inclusion in the FHIR specification."
-	case CarePlanActivityKindBinary:
-		return "A resource that represents the data of a single raw artifact as digital content accessible in its native format.  A Binary resource can contain any content, whether text, image, pdf, zip archive, etc."
 	case CarePlanActivityKindBiologicallyDerivedProduct:
 		return "A material substance originating from a biological entity intended to be transplanted or infused\ninto another (possibly the same) biological entity."
 	case CarePlanActivityKindBodyStructure:
 		return "Record details about an anatomical structure.  This resource may be used when a coded concept does not provide the necessary detail needed for the use case."
-	case CarePlanActivityKindBundle:
-		return "A container for a collection of resources."
 	case CarePlanActivityKindCapabilityStatement:
 		return "A Capability Statement documents a set of capabilities (behaviors) of a FHIR Server for a particular version of FHIR that may be used as a statement of actual server functionality or a statement of required or desired server implementation."
 	case CarePlanActivityKindCarePlan:
@@ -1127,12 +1098,16 @@ func (code CarePlanActivityKind) Definition() string {
 		return "The resource ChargeItem describes the provision of healthcare provider products for a certain patient, therefore referring not only to the product, but containing in addition details of the provision, like date, time, amounts and participating organizations and persons. Main Usage of the ChargeItem is to enable the billing process and internal cost allocation."
 	case CarePlanActivityKindChargeItemDefinition:
 		return "The ChargeItemDefinition resource provides the properties that apply to the (billing) codes necessary to calculate costs and prices. The properties may differ largely depending on type and realm, therefore this resource gives only a rough structure and requires profiling for each type of billing code system."
+	case CarePlanActivityKindCitation:
+		return "The Citation Resource enables reference to any knowledge artifact for purposes of identification and attribution. The Citation Resource supports existing reference structures and developing publication practices such as versioning, expressing complex contributorship roles, and referencing computable resources."
 	case CarePlanActivityKindClaim:
 		return "A provider issued list of professional services and products which have been provided, or are to be provided, to a patient which is sent to an insurer for reimbursement."
 	case CarePlanActivityKindClaimResponse:
 		return "This resource provides the adjudication details from the processing of a Claim resource."
 	case CarePlanActivityKindClinicalImpression:
 		return "A record of a clinical assessment performed to determine what problem(s) may affect the patient and before planning the treatments or management strategies that are best to manage a patient's condition. Assessments are often 1:1 with a clinical consultation / encounter,  but this varies greatly depending on the clinical workflow. This resource is called \"ClinicalImpression\" rather than \"ClinicalAssessment\" to avoid confusion with the recording of assessment tools such as Apgar score."
+	case CarePlanActivityKindClinicalUseDefinition:
+		return "A single issue - either an indication, contraindication, interaction or an undesirable effect for a medicinal product, medication, device or procedure."
 	case CarePlanActivityKindCodeSystem:
 		return "The CodeSystem resource is used to declare the existence of and describe a code system or code system supplement and its key properties, and optionally define a part or all of its content."
 	case CarePlanActivityKindCommunication:
@@ -1175,10 +1150,6 @@ func (code CarePlanActivityKind) Definition() string {
 		return "A collection of documents compiled for a purpose together with metadata that applies to the collection."
 	case CarePlanActivityKindDocumentReference:
 		return "A reference to a document of any kind for any purpose. Provides metadata about the document so that the document can be discovered and managed. The scope of a document is any seralized object with a mime-type, so includes formal patient centric documents (CDA), cliical notes, scanned paper, and non-patient specific documents like policy text."
-	case CarePlanActivityKindDomainResource:
-		return "A resource that includes narrative, extensions, and contained resources."
-	case CarePlanActivityKindEffectEvidenceSynthesis:
-		return "The EffectEvidenceSynthesis resource describes the difference in an outcome between exposures states in a population where the effect estimate is derived from a combination of research studies."
 	case CarePlanActivityKindEncounter:
 		return "An interaction between a patient and healthcare provider(s) for the purpose of providing healthcare service(s) or assessing the health status of a patient."
 	case CarePlanActivityKindEndpoint:
@@ -1192,9 +1163,11 @@ func (code CarePlanActivityKind) Definition() string {
 	case CarePlanActivityKindEventDefinition:
 		return "The EventDefinition resource provides a reusable description of when a particular event can occur."
 	case CarePlanActivityKindEvidence:
-		return "The Evidence resource describes the conditional state (population and any exposures being compared within the population) and outcome (if specified) that the knowledge (evidence, assertion, recommendation) is about."
+		return "The Evidence Resource provides a machine-interpretable expression of an evidence concept including the evidence variables (eg population, exposures/interventions, comparators, outcomes, measured variables, confounding variables), the statistics, and the certainty of this evidence."
+	case CarePlanActivityKindEvidenceReport:
+		return "The EvidenceReport Resource is a specialized container for a collection of resources and codable concepts, adapted to support compositions of Evidence, EvidenceVariable, and Citation resources and related concepts."
 	case CarePlanActivityKindEvidenceVariable:
-		return "The EvidenceVariable resource describes a \"PICO\" element that knowledge (evidence, assertion, recommendation) is about."
+		return "The EvidenceVariable resource describes an element that knowledge (Evidence) is about."
 	case CarePlanActivityKindExampleScenario:
 		return "Example of workflow instance."
 	case CarePlanActivityKindExplanationOfBenefit:
@@ -1223,6 +1196,8 @@ func (code CarePlanActivityKind) Definition() string {
 		return "A patient's point-in-time set of recommendations (i.e. forecasting) according to a published schedule with optional supporting justification."
 	case CarePlanActivityKindImplementationGuide:
 		return "A set of rules of how a particular interoperability or standards problem is solved - typically through the use of FHIR resources. This resource is used to gather all the parts of an implementation guide into a logical whole and to publish a computable definition of all the parts."
+	case CarePlanActivityKindIngredient:
+		return "An ingredient of a manufactured item or pharmaceutical product."
 	case CarePlanActivityKindInsurancePlan:
 		return "Details of a Health Insurance product/plan provided by an organization."
 	case CarePlanActivityKindInvoice:
@@ -1235,6 +1210,8 @@ func (code CarePlanActivityKind) Definition() string {
 		return "A list is a curated collection of resources."
 	case CarePlanActivityKindLocation:
 		return "Details and position information for a physical place where services are provided and resources and participants may be stored, found, contained, or accommodated."
+	case CarePlanActivityKindManufacturedItemDefinition:
+		return "The definition and characteristics of a medicinal manufactured item, such as a tablet or capsule, as contained in a packaged medicinal product."
 	case CarePlanActivityKindMeasure:
 		return "The Measure resource provides the definition of a quality measure."
 	case CarePlanActivityKindMeasureReport:
@@ -1253,26 +1230,8 @@ func (code CarePlanActivityKind) Definition() string {
 		return "An order or request for both supply of the medication and the instructions for administration of the medication to a patient. The resource is called \"MedicationRequest\" rather than \"MedicationPrescription\" or \"MedicationOrder\" to generalize the use across inpatient and outpatient settings, including care plans, etc., and to harmonize with workflow patterns."
 	case CarePlanActivityKindMedicationStatement:
 		return "A record of a medication that is being consumed by a patient.   A MedicationStatement may indicate that the patient may be taking the medication now or has taken the medication in the past or will be taking the medication in the future.  The source of this information can be the patient, significant other (such as a family member or spouse), or a clinician.  A common scenario where this information is captured is during the history taking process during a patient visit or stay.   The medication information may come from sources such as the patient's memory, from a prescription bottle,  or from a list of medications the patient, clinician or other party maintains. \n\nThe primary difference between a medication statement and a medication administration is that the medication administration has complete administration information and is based on actual administration information from the person who administered the medication.  A medication statement is often, if not always, less specific.  There is no required date/time when the medication was administered, in fact we only know that a source has reported the patient is taking this medication, where details such as time, quantity, or rate or even medication product may be incomplete or missing or less precise.  As stated earlier, the medication statement information may come from the patient's memory, from a prescription bottle or from a list of medications the patient, clinician or other party maintains.  Medication administration is more formal and is not missing detailed information."
-	case CarePlanActivityKindMedicinalProduct:
-		return "Detailed definition of a medicinal product, typically for uses other than direct patient care (e.g. regulatory use)."
-	case CarePlanActivityKindMedicinalProductAuthorization:
-		return "The regulatory authorization of a medicinal product."
-	case CarePlanActivityKindMedicinalProductContraindication:
-		return "The clinical particulars - indications, contraindications etc. of a medicinal product, including for regulatory purposes."
-	case CarePlanActivityKindMedicinalProductIndication:
-		return "Indication for the Medicinal Product."
-	case CarePlanActivityKindMedicinalProductIngredient:
-		return "An ingredient of a manufactured item or pharmaceutical product."
-	case CarePlanActivityKindMedicinalProductInteraction:
-		return "The interactions of the medicinal product with other medicinal products, or other forms of interactions."
-	case CarePlanActivityKindMedicinalProductManufactured:
-		return "The manufactured item as contained in the packaged medicinal product."
-	case CarePlanActivityKindMedicinalProductPackaged:
-		return "A medicinal product in a container or package."
-	case CarePlanActivityKindMedicinalProductPharmaceutical:
-		return "A pharmaceutical product described in terms of its composition and dose form."
-	case CarePlanActivityKindMedicinalProductUndesirableEffect:
-		return "Describe the undesirable effects of the medicinal product."
+	case CarePlanActivityKindMedicinalProductDefinition:
+		return "Detailed definition of a medicinal product, typically for uses other than direct patient care (e.g. regulatory use, drug catalogs, to support prescribing, adverse events management etc.)."
 	case CarePlanActivityKindMessageDefinition:
 		return "Defines the characteristics of a message that can be shared between systems, including the type of event that initiates the message, the content to be transmitted and what response(s), if any, are permitted."
 	case CarePlanActivityKindMessageHeader:
@@ -1283,6 +1242,8 @@ func (code CarePlanActivityKind) Definition() string {
 		return "A curated namespace that issues unique symbols within that namespace for the identification of concepts, people, devices, etc.  Represents a \"System\" used within the Identifier and Coding data types."
 	case CarePlanActivityKindNutritionOrder:
 		return "A request to supply a diet, formula feeding (enteral) or oral nutritional supplement to a patient/resident."
+	case CarePlanActivityKindNutritionProduct:
+		return "A food or fluid product that is consumed by patients."
 	case CarePlanActivityKindObservation:
 		return "Measurements and simple assertions made about a patient, device or other subject."
 	case CarePlanActivityKindObservationDefinition:
@@ -1295,8 +1256,8 @@ func (code CarePlanActivityKind) Definition() string {
 		return "A formally or informally recognized grouping of people or organizations formed for the purpose of achieving some form of collective action.  Includes companies, institutions, corporations, departments, community groups, healthcare practice groups, payer/insurer, etc."
 	case CarePlanActivityKindOrganizationAffiliation:
 		return "Defines an affiliation/assotiation/relationship between 2 distinct oganizations, that is not a part-of relationship/sub-division relationship."
-	case CarePlanActivityKindParameters:
-		return "This resource is a non-persisted resource used to pass information into and back from an [operation](operations.html). It has no other use, and there is no RESTful endpoint associated with it."
+	case CarePlanActivityKindPackagedProductDefinition:
+		return "A medically related item or items, in a container or package."
 	case CarePlanActivityKindPatient:
 		return "Demographics and other administrative information about an individual or animal receiving care or other health-related services."
 	case CarePlanActivityKindPaymentNotice:
@@ -1306,7 +1267,7 @@ func (code CarePlanActivityKind) Definition() string {
 	case CarePlanActivityKindPerson:
 		return "Demographics and administrative information about a person independent of a specific health-related context."
 	case CarePlanActivityKindPlanDefinition:
-		return "This resource allows for the definition of various types of plans as a sharable, consumable, and executable artifact. The resource is general enough to support the description of a broad range of clinical artifacts such as clinical decision support rules, order sets and protocols."
+		return "This resource allows for the definition of various types of plans as a sharable, consumable, and executable artifact. The resource is general enough to support the description of a broad range of clinical and non-clinical artifacts such as clinical decision support rules, order sets, protocols, and drug quality specifications."
 	case CarePlanActivityKindPractitioner:
 		return "A person who is directly or indirectly involved in the provisioning of healthcare."
 	case CarePlanActivityKindPractitionerRole:
@@ -1319,6 +1280,8 @@ func (code CarePlanActivityKind) Definition() string {
 		return "A structured set of questions intended to guide the collection of answers from end-users. Questionnaires provide detailed control over order, presentation, phraseology and grouping to allow coherent, consistent data collection."
 	case CarePlanActivityKindQuestionnaireResponse:
 		return "A structured set of questions and their answers. The questions are ordered and grouped into coherent subsets, corresponding to the structure of the grouping of the questionnaire being responded to."
+	case CarePlanActivityKindRegulatedAuthorization:
+		return "Regulatory approval, clearance or licencing related to a regulated product, treatment, facility or activity that is cited in a guidance, regulation, rule or legislative act. An example is Market Authorization relating to a Medicinal Product."
 	case CarePlanActivityKindRelatedPerson:
 		return "Information about a person that is involved in the care for a patient, but who is not the target of healthcare, nor has a formal responsibility in the care process."
 	case CarePlanActivityKindRequestGroup:
@@ -1331,12 +1294,8 @@ func (code CarePlanActivityKind) Definition() string {
 		return "A process where a researcher or organization plans and then executes a series of steps intended to increase the field of healthcare-related knowledge.  This includes studies of safety, efficacy, comparative effectiveness and other information about medications, devices, therapies and other interventional and investigative techniques.  A ResearchStudy involves the gathering of information about human or animal subjects."
 	case CarePlanActivityKindResearchSubject:
 		return "A physical entity which is the primary unit of operational and/or administrative interest in a study."
-	case CarePlanActivityKindResource:
-		return "This is the base resource type for everything."
 	case CarePlanActivityKindRiskAssessment:
 		return "An assessment of the likely outcome(s) for a patient or other subject as well as the likelihood of each outcome."
-	case CarePlanActivityKindRiskEvidenceSynthesis:
-		return "The RiskEvidenceSynthesis resource describes the likelihood of an outcome in a population plus exposure state where the risk estimate is derived from a combination of research studies."
 	case CarePlanActivityKindSchedule:
 		return "A container for slots of time that may be available for booking appointments."
 	case CarePlanActivityKindSearchParameter:
@@ -1355,19 +1314,13 @@ func (code CarePlanActivityKind) Definition() string {
 		return "A Map of relationships between 2 structures that can be used to transform data."
 	case CarePlanActivityKindSubscription:
 		return "The subscription resource is used to define a push-based subscription from a server to another system. Once a subscription is registered with the server, the server checks every resource that is created or updated, and if the resource matches the given criteria, it sends a message on the defined \"channel\" so that another system can take an appropriate action."
+	case CarePlanActivityKindSubscriptionStatus:
+		return "The SubscriptionStatus resource describes the state of a Subscription during notifications."
+	case CarePlanActivityKindSubscriptionTopic:
+		return "Describes a stream of resource state changes identified by trigger criteria and annotated with labels useful to filter projections from this topic."
 	case CarePlanActivityKindSubstance:
 		return "A homogeneous material with a definite composition."
-	case CarePlanActivityKindSubstanceNucleicAcid:
-		return "Nucleic acids are defined by three distinct elements: the base, sugar and linkage. Individual substance/moiety IDs will be created for each of these elements. The nucleotide sequence will be always entered in the 5’-3’ direction."
-	case CarePlanActivityKindSubstancePolymer:
-		return "Todo."
-	case CarePlanActivityKindSubstanceProtein:
-		return "A SubstanceProtein is defined as a single unit of a linear amino acid sequence, or a combination of subunits that are either covalently linked or have a defined invariant stoichiometric relationship. This includes all synthetic, recombinant and purified SubstanceProteins of defined sequence, whether the use is therapeutic or prophylactic. This set of elements will be used to describe albumins, coagulation factors, cytokines, growth factors, peptide/SubstanceProtein hormones, enzymes, toxins, toxoids, recombinant vaccines, and immunomodulators."
-	case CarePlanActivityKindSubstanceReferenceInformation:
-		return "Todo."
-	case CarePlanActivityKindSubstanceSourceMaterial:
-		return "Source material shall capture information on the taxonomic and anatomical origins as well as the fraction of a material that can result in or can be modified to form a substance. This set of data elements shall be used to define polymer substances isolated from biological matrices. Taxonomic and anatomical origins shall be described using a controlled vocabulary as required. This information is captured for naturally derived polymers ( . starch) and structurally diverse substances. For Organisms belonging to the Kingdom Plantae the Substance level defines the fresh material of a single species or infraspecies, the Herbal Drug and the Herbal preparation. For Herbal preparations, the fraction information will be captured at the Substance information level and additional information for herbal extracts will be captured at the Specified Substance Group 1 information level. See for further explanation the Substance Class: Structurally Diverse and the herbal annex."
-	case CarePlanActivityKindSubstanceSpecification:
+	case CarePlanActivityKindSubstanceDefinition:
 		return "The detailed description of a substance, typically at a level beyond what is used for prescribing."
 	case CarePlanActivityKindSupplyDelivery:
 		return "Record of delivery of what is supplied."
@@ -1387,6 +1340,8 @@ func (code CarePlanActivityKind) Definition() string {
 		return "Describes validation requirements, source(s), status and dates for one or more elements."
 	case CarePlanActivityKindVisionPrescription:
 		return "An authorization for the provision of glasses and/or contact lenses to a patient."
+	case CarePlanActivityKindParameters:
+		return "This resource is a non-persisted resource used to pass information into and back from an [operation](operations.html). It has no other use, and there is no RESTful endpoint associated with it."
 	}
 	return "<unknown>"
 }
