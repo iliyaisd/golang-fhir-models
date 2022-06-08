@@ -67,16 +67,16 @@ type ObservationComponent struct {
 	Extension            []Extension                 `bson:"extension,omitempty" json:"extension,omitempty"`
 	ModifierExtension    []Extension                 `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Code                 CodeableConcept             `bson:"code" json:"code"`
-	ValueQuantity        Quantity                    `bson:"valueQuantity,omitempty" json:"valueQuantity,omitempty"`
-	ValueCodeableConcept CodeableConcept             `bson:"valueCodeableConcept,omitempty" json:"valueCodeableConcept,omitempty"`
-	ValueString          string                      `bson:"valueString,omitempty" json:"valueString,omitempty"`
-	ValueBoolean         bool                        `bson:"valueBoolean,omitempty" json:"valueBoolean,omitempty"`
-	ValueInteger         int                         `bson:"valueInteger,omitempty" json:"valueInteger,omitempty"`
-	ValueRange           Range                       `bson:"valueRange,omitempty" json:"valueRange,omitempty"`
-	ValueRatio           Ratio                       `bson:"valueRatio,omitempty" json:"valueRatio,omitempty"`
-	ValueTime            string                      `bson:"valueTime,omitempty" json:"valueTime,omitempty"`
-	ValueDateTime        string                      `bson:"valueDateTime,omitempty" json:"valueDateTime,omitempty"`
-	ValuePeriod          Period                      `bson:"valuePeriod,omitempty" json:"valuePeriod,omitempty"`
+	ValueQuantity        *Quantity                   `bson:"valueQuantity,omitempty" json:"valueQuantity,omitempty"`
+	ValueCodeableConcept *CodeableConcept            `bson:"valueCodeableConcept,omitempty" json:"valueCodeableConcept,omitempty"`
+	ValueString          *string                     `bson:"valueString,omitempty" json:"valueString,omitempty"`
+	ValueBoolean         *bool                       `bson:"valueBoolean,omitempty" json:"valueBoolean,omitempty"`
+	ValueInteger         *int                        `bson:"valueInteger,omitempty" json:"valueInteger,omitempty"`
+	ValueRange           *Range                      `bson:"valueRange,omitempty" json:"valueRange,omitempty"`
+	ValueRatio           *Ratio                      `bson:"valueRatio,omitempty" json:"valueRatio,omitempty"`
+	ValueTime            *string                     `bson:"valueTime,omitempty" json:"valueTime,omitempty"`
+	ValueDateTime        *string                     `bson:"valueDateTime,omitempty" json:"valueDateTime,omitempty"`
+	ValuePeriod          *Period                     `bson:"valuePeriod,omitempty" json:"valuePeriod,omitempty"`
 	DataAbsentReason     *CodeableConcept            `bson:"dataAbsentReason,omitempty" json:"dataAbsentReason,omitempty"`
 	Interpretation       []CodeableConcept           `bson:"interpretation,omitempty" json:"interpretation,omitempty"`
 	ReferenceRange       []ObservationReferenceRange `bson:"referenceRange,omitempty" json:"referenceRange,omitempty"`

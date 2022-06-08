@@ -442,6 +442,13 @@ func appendFields(resources ResourceMap, requiredTypes map[string]bool, required
 
 						fieldType := ToUpper(tp.Code[0:1]) + tp.Code[1:]
 						statement := fields.Id("Value" + fieldType)
+
+						if *element.Max == "*" {
+							statement.Op("[]")
+						} else if *element.Min == 0 {
+							statement.Op("*")
+						}
+
 						statement.Id(typeCodeToTypeIdentifier(tp.Code))
 						tag := ReplaceAll(pathParts[level], "[x]", fieldType)
 						statement.Tag(map[string]string{"json": tag + ",omitempty", "bson": tag + ",omitempty"})
