@@ -435,9 +435,12 @@ func appendFields(resources ResourceMap, requiredTypes map[string]bool, required
 			default:
 				if name == "Value[X]" {
 					switch parentName {
-					case "Observation", "ObservationComponent":
+					case "Observation", "ObservationComponent", "Extension":
 						for _, tp := range element.Type {
 							if tp.Code == "SampledData" {
+								continue
+							}
+							if parentName == "Extension" && tp.Code != "Coding" {
 								continue
 							}
 
